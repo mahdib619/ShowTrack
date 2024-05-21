@@ -7,11 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Migrators\PostgreSQLMigrator\PostgresqlMigrator.csproj" />
+    <ProjectReference Include="..\Migrators\SqlServerMigrator\SqlServerMigrator.csproj" />
+    <ProjectReference Include="..\ShowTrack.Data\ShowTrack.Data.csproj" />
   </ItemGroup>
 
 </Project>
