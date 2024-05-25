@@ -218,6 +218,70 @@ namespace PostgresqlMigrator.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ShowTrack.Domain.Entities.Show", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("CurrentSeason")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("ScheduleId")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Shows");
+                });
+
+            modelBuilder.Entity("ShowTrack.Domain.Entities.ShowSchedule", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(36)");
+
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Season")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("ShowId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShowId")
+                        .IsUnique();
+
+                    b.ToTable("ShowSchedules");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -267,6 +331,33 @@ namespace PostgresqlMigrator.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ShowTrack.Domain.Entities.Show", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShowTrack.Domain.Entities.ShowSchedule", b =>
+                {
+                    b.HasOne("ShowTrack.Domain.Entities.Show", "Show")
+                        .WithOne("Schedule")
+                        .HasForeignKey("ShowTrack.Domain.Entities.ShowSchedule", "ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("ShowTrack.Domain.Entities.Show", b =>
+                {
+                    b.Navigation("Schedule");
                 });
 #pragma warning restore 612, 618
         }
