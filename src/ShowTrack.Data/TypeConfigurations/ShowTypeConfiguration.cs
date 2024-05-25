@@ -14,7 +14,7 @@ internal sealed class ShowTypeConfiguration : IEntityTypeConfiguration<Show>
         builder.Property(e => e.Title).HasMaxLength(100)
                                       .IsRequired();
 
-        builder.Property(e => e.UserId).IsRequiredGuid();
+        builder.Property(e => e.UserId).HasMaxLength(450);
 
         builder.Property(e => e.CurrentSeason).HasMaxLength(10)
                                               .IsRequired();

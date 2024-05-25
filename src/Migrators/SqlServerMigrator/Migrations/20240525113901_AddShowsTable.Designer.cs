@@ -12,7 +12,7 @@ using ShowTrack.Data;
 namespace SqlServerMigrator.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240525094506_AddShowsTable")]
+    [Migration("20240525113901_AddShowsTable")]
     partial class AddShowsTable
     {
         /// <inheritdoc />
@@ -247,9 +247,8 @@ namespace SqlServerMigrator.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(36)");
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 

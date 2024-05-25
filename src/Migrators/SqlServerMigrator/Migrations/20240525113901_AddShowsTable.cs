@@ -17,7 +17,7 @@ namespace SqlServerMigrator.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(36)", unicode: false, maxLength: 36, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    UserId = table.Column<string>(type: "varchar(36)", unicode: false, maxLength: 36, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
                     CurrentSeason = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ScheduleId = table.Column<string>(type: "varchar(36)", unicode: false, maxLength: 36, nullable: true)
                 },

@@ -17,7 +17,7 @@ namespace PostgresqlMigrator.Migrations
                 {
                     Id = table.Column<string>(type: "character varying(36)", unicode: false, maxLength: 36, nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    UserId = table.Column<string>(type: "character varying(36)", unicode: false, maxLength: 36, nullable: false),
+                    UserId = table.Column<string>(type: "character varying(450)", maxLength: 450, nullable: false),
                     CurrentSeason = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     ScheduleId = table.Column<string>(type: "character varying(36)", unicode: false, maxLength: 36, nullable: true)
                 },

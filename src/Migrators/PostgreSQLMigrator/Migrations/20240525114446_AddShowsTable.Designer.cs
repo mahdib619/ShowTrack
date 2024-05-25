@@ -12,7 +12,7 @@ using ShowTrack.Data;
 namespace PostgresqlMigrator.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240525094722_AddShowsTable")]
+    [Migration("20240525114446_AddShowsTable")]
     partial class AddShowsTable
     {
         /// <inheritdoc />
@@ -245,9 +245,8 @@ namespace PostgresqlMigrator.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character varying(36)");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.HasKey("Id");
 
