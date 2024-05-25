@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShowTrack.Data;
 using ShowTrack.Web.Extensions;
+using ShowTrack.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var dbProvider = builder.Configuration["DbProvider"];
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseDatabase(dbProvider, builder.Configuration));
+
+builder.Services.AddScoped<IShowService, ShowService>();
 
 builder.Services.AddControllersWithViews();
 
