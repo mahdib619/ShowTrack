@@ -22,7 +22,7 @@ public static class ServiceProviderExtensions
             await roleManager.CreateAsync(new() { Name = "admin" });
         }
 
-        if (userManager.Users.Any(u => u.UserName == userManager.NormalizeName(adminUserName)))
+        if (userManager.Users.Any(u => u.NormalizedUserName == userManager.NormalizeName(adminUserName)))
         {
             return;
         }
