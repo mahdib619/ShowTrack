@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlServerMigrator", "src\Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgresqlMigrator", "src\Migrators\PostgreSQLMigrator\PostgresqlMigrator.csproj", "{BDD5C30E-031F-425A-B105-085546930A83}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowTrack.Domain", "ShowTrack.Domain\ShowTrack.Domain.csproj", "{B16078B4-2C1B-4DE5-99B6-9AAB244079F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{BDD5C30E-031F-425A-B105-085546930A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDD5C30E-031F-425A-B105-085546930A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDD5C30E-031F-425A-B105-085546930A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B16078B4-2C1B-4DE5-99B6-9AAB244079F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B16078B4-2C1B-4DE5-99B6-9AAB244079F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B16078B4-2C1B-4DE5-99B6-9AAB244079F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B16078B4-2C1B-4DE5-99B6-9AAB244079F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
