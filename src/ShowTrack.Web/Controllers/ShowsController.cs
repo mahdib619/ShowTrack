@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ShowTrack.Domain.Entities;
+using ShowTrack.Contracts.Dtos;
 using ShowTrack.Web.Extensions;
-using ShowTrack.Web.Models.Dtos;
 using ShowTrack.Web.Services;
 using System.Security.Claims;
 

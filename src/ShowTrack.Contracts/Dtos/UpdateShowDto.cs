@@ -1,6 +1,6 @@
 ﻿using ShowTrack.Domain.Entities;
 
-namespace ShowTrack.Web.Models.Dtos;
+namespace ShowTrack.Contracts.Dtos;
 
 public class UpdateShowDto
 {

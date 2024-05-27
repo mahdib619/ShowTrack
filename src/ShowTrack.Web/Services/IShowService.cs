@@ -1,6 +1,6 @@
 ﻿using OneOf;
+using ShowTrack.Contracts.Dtos;
 using ShowTrack.Web.Models;
-using ShowTrack.Web.Models.Dtos;
 
 namespace ShowTrack.Web.Services;
 
