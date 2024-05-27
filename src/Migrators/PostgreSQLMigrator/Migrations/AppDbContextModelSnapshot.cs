@@ -230,11 +230,6 @@ namespace PostgresqlMigrator.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
-                    b.Property<string>("ScheduleId")
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character varying(36)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)

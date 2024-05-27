@@ -19,8 +19,6 @@ internal sealed class ShowTypeConfiguration : IEntityTypeConfiguration<Show>
         builder.Property(e => e.CurrentSeason).HasMaxLength(10)
                                               .IsRequired();
 
-        builder.Property(e => e.ScheduleId).IsGuid();
-
         builder.HasOne(e => e.Schedule)
                .WithOne(e => e.Show)
                .HasForeignKey<ShowSchedule>(e => e.ShowId)

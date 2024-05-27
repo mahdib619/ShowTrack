@@ -13,6 +13,5 @@ public sealed class Show
 
     public required string CurrentSeason { get; set; }
 
-    public string? ScheduleId { get; init; }
-    public ShowSchedule? Schedule { get; init; }
+    public ShowSchedule? Schedule { get; set; }
 }
