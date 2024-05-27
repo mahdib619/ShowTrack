@@ -1,8 +1,10 @@
 ﻿namespace ShowTrack.Web.Models;
 
-public class ClientError
+public class ApiError
 {
     public required string Message { get; set; }
-    public required int StatusCode { get; set; }
-    public object? Details { get; set; }
+    public required int StatusCode { get; init; }
+    public object? Details { get; init; }
 }
+
+public class ClientError : ApiError;

@@ -11,7 +11,7 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseDatabase(dbProvider, b
 
 builder.Services.AddScoped<IShowService, ShowService>();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddBearerToken(IdentityConstants.BearerScheme)
@@ -29,8 +29,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseRouting();
 
 app.UseHttpsRedirection();
 
@@ -39,6 +38,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>().ManageIdentityApi();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 await using var scope = app.Services.CreateAsyncScope();
 

@@ -4,7 +4,7 @@ namespace ShowTrack.Web.Models.Dtos;
 
 public class UpdateShowDto
 {
-    public required string Id { get; init; }
+    public required string Id { get; set; }
     public required string Title { get; init; }
     public required string CurrentSeason { get; init; }
 
