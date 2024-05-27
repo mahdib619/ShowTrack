@@ -2,9 +2,9 @@
 
 namespace ShowTrack.Web.Models.Dtos;
 
-public sealed class CreateShowScheduleDto
+public sealed class UpdateShowScheduleDto
 {
-    public required string ShowId { get; init; }
+    public required string ShowId { get; set; }
     public DateOnly ReleaseDate { get; init; }
     public required string Season { get; init; }
 
@@ -14,4 +14,10 @@ public sealed class CreateShowScheduleDto
         ReleaseDate = ReleaseDate,
         Season = Season
     };
+
+    public void UpdateEntity(ShowSchedule schedule)
+    {
+        schedule.ReleaseDate = ReleaseDate;
+        schedule.Season = Season;
+    }
 }

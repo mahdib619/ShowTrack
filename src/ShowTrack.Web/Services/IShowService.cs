@@ -11,4 +11,6 @@ public interface IShowService
     Task<ReadShowDto> CreateShow(CreateShowDto showCreate);
     Task<OneOf<bool, ClientError>> UpdateShow(string userId, UpdateShowDto showUpdate);
     Task<OneOf<bool, ClientError>> DeleteShow(string userId, string showId);
+    Task<OneOf<ReadShowScheduleDto, bool, ClientError>> CreateOrUpdateShowSchedule(string userId, UpdateShowScheduleDto updateShowSchedule);
+    Task<OneOf<bool, ClientError>> DeleteShowSchedule(string userId, string showId);
 }

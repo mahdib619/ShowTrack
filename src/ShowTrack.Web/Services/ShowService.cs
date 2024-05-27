@@ -10,7 +10,8 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
 {
     public async Task<IReadOnlyCollection<ReadShowDto>> GetAllUserShows(string userId)
     {
-        var shows = await dbContext.Shows.Where(s => s.UserId == userId)
+        var shows = await dbContext.Shows.Include(s => s.Schedule)
+                                         .Where(s => s.UserId == userId)
                                          .Select(s => ReadShowDto.FromEntity(s))
                                          .ToListAsync();
 
@@ -19,11 +20,12 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
 
     public async Task<ReadShowDto?> GetShow(string userId, string showId)
     {
-        var shows = await dbContext.Shows.Where(s => s.UserId == userId && s.Id == showId)
-                                         .Select(s => ReadShowDto.FromEntity(s))
-                                         .FirstOrDefaultAsync();
+        var show = await dbContext.Shows.Include(s => s.Schedule)
+                                        .Where(s => s.UserId == userId && s.Id == showId)
+                                        .Select(s => ReadShowDto.FromEntity(s))
+                                        .FirstOrDefaultAsync();
 
-        return shows;
+        return show;
     }
 
     public async Task<ReadShowDto> CreateShow(CreateShowDto showCreate)
@@ -45,7 +47,7 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
             return new ClientError
             {
                 Message = "Show not found!",
-                StatusCode = 404
+                StatusCode = StatusCodes.Status404NotFound
             };
         }
 
@@ -63,11 +65,66 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
             return new ClientError
             {
                 Message = "Show not found!",
-                StatusCode = 404
+                StatusCode = StatusCodes.Status404NotFound
             };
         }
 
         dbContext.Shows.Remove(show);
+
+        return await dbContext.SaveChangesAsync() > 0;
+    }
+
+    public async Task<OneOf<ReadShowScheduleDto, bool, ClientError>> CreateOrUpdateShowSchedule(string userId, UpdateShowScheduleDto updateShowSchedule)
+    {
+        var show = await dbContext.Shows.Include(s => s.Schedule)
+                                        .Where(s => s.UserId == userId && s.Id == updateShowSchedule.ShowId)
+                                        .FirstOrDefaultAsync();
+
+        if (show is null)
+        {
+            return new ClientError
+            {
+                Message = "Invalid show id!",
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+
+        if (show.Schedule is null)
+        {
+            show.Schedule = updateShowSchedule.ToEntity();
+            await dbContext.SaveChangesAsync();
+            return ReadShowScheduleDto.FromEntity(show.Schedule);
+        }
+
+        updateShowSchedule.UpdateEntity(show.Schedule);
+        return await dbContext.SaveChangesAsync() > 0;
+    }
+
+    public async Task<OneOf<bool, ClientError>> DeleteShowSchedule(string userId, string showId)
+    {
+        var show = await dbContext.Shows.Include(s => s.Schedule)
+                                        .Where(s => s.UserId == userId && s.Id == showId)
+                                        .FirstOrDefaultAsync();
+
+        if (show is null)
+        {
+            return new ClientError
+            {
+                Message = "Invalid show id!",
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+
+        if (show.Schedule is null)
+        {
+            return new ClientError
+            {
+                Message = "Show has no schedule!",
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+
+        show.Schedule = null;
 
         return await dbContext.SaveChangesAsync() > 0;
     }

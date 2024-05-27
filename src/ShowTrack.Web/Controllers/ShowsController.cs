@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShowTrack.Domain.Entities;
 using ShowTrack.Web.Extensions;
 using ShowTrack.Web.Models.Dtos;
 using ShowTrack.Web.Services;
@@ -57,6 +58,33 @@ public class ShowsController(IShowService showService) : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
         var result = await showService.DeleteShow(userId, id);
+
+        return result.Match(this.HandleEntityChange, this.HandleClientError);
+    }
+
+    [HttpPut("{showId}/schedule")]
+    public async Task<IActionResult> CreateOrUpdateShowSchedule(string showId, UpdateShowScheduleDto updateShowSchedule)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+        updateShowSchedule.ShowId = showId;
+
+        var result = await showService.CreateOrUpdateShowSchedule(userId, updateShowSchedule);
+
+        return result.Match(HandleShowScheduleCreated, this.HandleEntityChange, this.HandleClientError);
+
+        IActionResult HandleShowScheduleCreated(ReadShowScheduleDto showSchedule)
+        {
+            return CreatedAtAction(nameof(GetShow), new { Id = showSchedule.ShowId }, showSchedule);
+        }
+    }
+
+    [HttpDelete("{showId}/schedule")]
+    public async Task<IActionResult> DeleteShowSchedule(string showId)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+        var result = await showService.DeleteShowSchedule(userId, showId);
 
         return result.Match(this.HandleEntityChange, this.HandleClientError);
     }

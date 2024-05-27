@@ -7,7 +7,7 @@ public sealed class ShowSchedule
     public required string ShowId { get; init; }
     public Show? Show { get; init; }
 
-    public DateOnly ReleaseDate { get; init; }
+    public DateOnly ReleaseDate { get; set; }
 
-    public required string Season { get; init; }
+    public required string Season { get; set; }
 }
