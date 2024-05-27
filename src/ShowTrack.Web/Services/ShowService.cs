@@ -17,6 +17,15 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
         return shows;
     }
 
+    public async Task<ReadShowDto?> GetShow(string userId, string showId)
+    {
+        var shows = await dbContext.Shows.Where(s => s.UserId == userId && s.Id == showId)
+                                         .Select(s => ReadShowDto.FromEntity(s))
+                                         .FirstOrDefaultAsync();
+
+        return shows;
+    }
+
     public async Task<ReadShowDto> CreateShow(CreateShowDto showCreate)
     {
         var show = showCreate.ToEntity();
