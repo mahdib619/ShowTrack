@@ -6,6 +6,11 @@ using ShowTrack.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", config => config.SetIsOriginAllowed(_ => true)
+                                                                          .AllowCredentials()
+                                                                          .AllowAnyHeader()
+                                                                          .AllowAnyMethod()));
+
 var dbProvider = builder.Configuration["DbProvider"];
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseDatabase(dbProvider, builder.Configuration));
 
@@ -32,6 +37,8 @@ var app = builder.Build();
 app.UseRouting();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
