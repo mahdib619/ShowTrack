@@ -1,0 +1,24 @@
+﻿@page "/"
+@using ShowTrack.Contracts.Dtos
+@using ShowTrack.Client.Services
+
+@inject IShowsService ShowsService
+
+<PageTitle>Home</PageTitle>
+
+<RadzenDataGrid Data="_shows" Count="_dataCount">
+    <Columns>
+        <RadzenDataGridColumn Property="Title" Title="Title" />
+    </Columns>
+</RadzenDataGrid>
+
+@code
+{
+    private IList<ReadShowDto>? _shows;
+    private int _dataCount => _shows?.Count ?? 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _shows = await ShowsService.GetAllShows();
+    }
+}
