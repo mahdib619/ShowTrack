@@ -9,6 +9,7 @@ public sealed class ReadShowDto
     public required string UserId { get; init; }
     public required string CurrentSeason { get; init; }
     public ReadShowScheduleDto? Schedule { get; init; }
+    public bool IsEnded { get; init; }
 
     public static ReadShowDto FromEntity(Show entity) => new()
     {

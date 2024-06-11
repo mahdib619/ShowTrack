@@ -1,0 +1,4 @@
+﻿::deep .show-title {
+    min-height: 72px;
+    background-color: var(--rz-secondary-lighter);
+}
