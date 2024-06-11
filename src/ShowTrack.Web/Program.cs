@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShowTrack.Data;
 using ShowTrack.Web.Extensions;
+using ShowTrack.Web.Models;
 using ShowTrack.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<EmailClient>(builder.Configuration.GetSection("EmailClient"));
 
 builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", config => config.SetIsOriginAllowed(_ => true)
                                                                           .AllowCredentials()
@@ -15,6 +18,7 @@ var dbProvider = builder.Configuration["DbProvider"];
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseDatabase(dbProvider, builder.Configuration));
 
 builder.Services.AddScoped<IShowService, ShowService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddControllers();
 
