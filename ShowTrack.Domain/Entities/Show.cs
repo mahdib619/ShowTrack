@@ -14,4 +14,6 @@ public sealed class Show
     public required string CurrentSeason { get; set; }
 
     public ShowSchedule? Schedule { get; set; }
+
+    public bool IsEnded { get; set; }
 }

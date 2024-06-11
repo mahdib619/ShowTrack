@@ -17,6 +17,7 @@ public sealed class ReadShowDto
         Title = entity.Title,
         UserId = entity.UserId,
         CurrentSeason = entity.CurrentSeason,
-        Schedule = entity.Schedule is null ? null : ReadShowScheduleDto.FromEntity(entity.Schedule)
+        Schedule = entity.Schedule is null ? null : ReadShowScheduleDto.FromEntity(entity.Schedule),
+        IsEnded = entity.IsEnded
     };
 }
