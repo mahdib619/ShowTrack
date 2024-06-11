@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ShowTrack.Domain\ShowTrack.Domain.csproj" />
     <ProjectReference Include="..\Migrators\PostgreSQLMigrator\PostgresqlMigrator.csproj" />
     <ProjectReference Include="..\Migrators\SqlServerMigrator\SqlServerMigrator.csproj" />
     <ProjectReference Include="..\ShowTrack.Contracts\ShowTrack.Contracts.csproj" />
