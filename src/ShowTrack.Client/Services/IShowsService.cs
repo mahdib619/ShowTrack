@@ -5,7 +5,7 @@ namespace ShowTrack.Client.Services;
 public interface IShowsService
 {
     Task<IList<ReadShowDto>?> GetAllShows();
-    Task<IList<ReadShowDto>?> GetSingleShow(string id);
+    Task<ReadShowDto?> GetSingleShow(string id);
     Task<ReadShowDto> CreateShow(CreateShowDto showCreate);
     Task UpdateShow(UpdateShowDto showUpdate);
     Task DeleteShow(string showId);

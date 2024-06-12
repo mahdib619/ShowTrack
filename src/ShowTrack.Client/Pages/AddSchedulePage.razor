@@ -1,0 +1,75 @@
+﻿@using ShowTrack.Contracts.Dtos
+@using System.Globalization
+
+@inject DialogService DialogService
+
+<h1>@Show.Title</h1>
+
+<div>
+    <RadzenTemplateForm TItem="UpdateShowScheduleDto" Data="NewSchedule" Submit="() => DialogService.Close(NewSchedule)">
+        <RadzenRow Gap="10">
+            <RadzenColumn Size="12" SizeSM="10">
+                <RadzenFormField Text="Schedule Date" Style="width: 100%;">
+                    <RadzenDatePicker TValue="DateOnly" @bind-Value="@NewSchedule!.ReleaseDate" Name="ScheduleDate" Culture='new CultureInfo("en-us")' Min="DateTime.Today.AddDays(1)" DateFormat="yyyy/MM/dd" />
+                </RadzenFormField>
+                <RadzenNumericRangeValidator Min="DateOnly.FromDateTime(DateTime.Today)" Component="ScheduleDate" Text="Invalid date."/>
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeSM="2">
+                <RadzenFormField Text="Season" Style="width: 100%;">
+                    <RadzenNumeric Min="@minSeason" Name="ScheduleSeason" TValue="int?" ShowUpDown="false" @bind-Value="@NewSchedule!.Season" Style="width: 100%;" />
+                </RadzenFormField>
+                <RadzenCustomValidator @ref="_seasonValidator" Component="ScheduleSeason" Validator="ValidateSeason"></RadzenCustomValidator>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow RowGap="15">
+            <RadzenColumn Size="12" />
+            <RadzenColumn Size="4" Offset="4" SizeSM="2" OffsetSM="8">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="() => DialogService.Close(null)" Text="Cancel" Style="width:100%" />
+            </RadzenColumn>
+            <RadzenColumn Size="4" SizeSM="2">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Text="Update" Style="width:100%" />
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    [Parameter]
+    public required ReadShowDto Show { get; set; }
+
+    private RadzenCustomValidator _seasonValidator = new();
+
+    private int minSeason;
+    private UpdateShowScheduleDto? NewSchedule;
+
+    protected override Task OnInitializedAsync()
+    {
+        int.TryParse(Show.CurrentSeason, out minSeason);
+
+        NewSchedule = new()
+        {
+            ShowId = Show.Id,
+            ReleaseDate = Show.Schedule?.ReleaseDate ?? DateOnly.FromDateTime(DateTime.Now).AddDays(1),
+            Season = minSeason + 1
+        };
+
+        return Task.CompletedTask;
+    }
+
+    private bool ValidateSeason()
+    {
+        switch (NewSchedule!.Season)
+        {
+            case > 0 when NewSchedule!.Season > minSeason:
+                return true;
+            case null:
+                _seasonValidator.Text = "Season is required.";
+                break;
+            default:
+                _seasonValidator.Text = "Invalid season!";
+                break;
+        }
+
+        return false;
+    }
+}

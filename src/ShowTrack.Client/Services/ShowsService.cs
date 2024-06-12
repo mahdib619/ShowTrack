@@ -10,9 +10,9 @@ public class ShowsService(HttpClient httpClient) : IShowsService
         return await httpClient.GetFromJsonAsync<IList<ReadShowDto>>("api/Shows");
     }
 
-    public async Task<IList<ReadShowDto>?> GetSingleShow(string id)
+    public async Task<ReadShowDto?> GetSingleShow(string id)
     {
-        return await httpClient.GetFromJsonAsync<IList<ReadShowDto>>($"api/Shows/{id}");
+        return await httpClient.GetFromJsonAsync<ReadShowDto>($"api/Shows/{id}");
     }
 
     public async Task<ReadShowDto> CreateShow(CreateShowDto showCreate)

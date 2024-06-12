@@ -2,6 +2,7 @@
 
 @using ShowTrack.Contracts.Dtos
 @using ShowTrack.Client.Services
+@using System.Globalization
 
 @inject IShowsService ShowsService
 @inject DialogService DialogService
@@ -30,7 +31,7 @@
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Next Season On</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(show.Schedule?.ReleaseDate.ToString("yyyy-MM-dd") ?? "-")</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(show.Schedule?.ReleaseDate.ToString("yyyy-MM-dd", new CultureInfo("en-us")) ?? "-")</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">State</RadzenText>
@@ -39,7 +40,7 @@
                         </RadzenRow>
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
-                        <RadzenButton Text="Schedule" Style="width: 100%" />
+                        <RadzenButton Text="Schedule" Style="width: 100%" Click="()=>AddSchedule(show)" />
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
@@ -67,5 +68,19 @@
         var result = await ShowsService.CreateShow(newShow);
 
         _shows!.Add(result);
+    }
+
+    private async Task AddSchedule(ReadShowDto show)
+    {
+        UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>("Update Schedule",
+                                                                                             new() { ["Show"] = show },
+                                                                                             new() { ShowClose = false, CloseDialogOnOverlayClick = true });
+
+        if (newSchedule is null)
+            return;
+
+        await ShowsService.CreateOrUpdateShowSchedule(newSchedule);
+
+        show.Schedule = (await ShowsService.GetSingleShow(show.Id))?.Schedule;
     }
 }

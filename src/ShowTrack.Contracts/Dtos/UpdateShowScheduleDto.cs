@@ -5,19 +5,19 @@ namespace ShowTrack.Contracts.Dtos;
 public sealed class UpdateShowScheduleDto
 {
     public required string ShowId { get; set; }
-    public DateOnly ReleaseDate { get; init; }
-    public required string Season { get; init; }
+    public DateOnly ReleaseDate { get; set; }
+    public required int? Season { get; set; }
 
     public ShowSchedule ToEntity() => new()
     {
         ShowId = ShowId,
         ReleaseDate = ReleaseDate,
-        Season = Season
+        Season = Season?.ToString() ?? string.Empty
     };
 
     public void UpdateEntity(ShowSchedule schedule)
     {
         schedule.ReleaseDate = ReleaseDate;
-        schedule.Season = Season;
+        schedule.Season = Season?.ToString() ?? string.Empty;
     }
 }

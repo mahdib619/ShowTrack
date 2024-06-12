@@ -9,6 +9,8 @@ using ShowTrack.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScheduler();
+
 builder.Services.Configure<EmailClient>(builder.Configuration.GetSection("EmailClient"));
 
 builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", config => config.SetIsOriginAllowed(_ => true)
@@ -21,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseDatabase(dbProvider, b
 
 builder.Services.AddScoped<IShowService, ShowService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddTransient<NotifyShowsNewSeasonJob>();
 
 builder.Services.AddControllers();
 
@@ -38,9 +41,14 @@ builder.Services.AddIdentityCore<IdentityUser>()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScheduler();
-
 var app = builder.Build();
+
+app.Services.UseScheduler(schedule =>
+{
+    schedule.Schedule<NotifyShowsNewSeasonJob>()
+            .DailyAt(ShowService.ShowsNotifyTime.Hour, ShowService.ShowsNotifyTime.Minute)
+            .RunOnceAtStart();
+});
 
 app.UseRouting();
 
@@ -56,13 +64,6 @@ app.MapIdentityApi<IdentityUser>().ManageIdentityApi();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.Services.UseScheduler(schedule =>
-{
-    schedule.Schedule<NotifyShowsNewSeasonJob>()
-            .DailyAt(ShowService.ShowsNotifyTime.Hour, ShowService.ShowsNotifyTime.Minute)
-            .RunOnceAtStart();
-});
 
 await using var scope = app.Services.CreateAsyncScope();
 
