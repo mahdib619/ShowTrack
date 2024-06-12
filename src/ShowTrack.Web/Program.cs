@@ -1,7 +1,9 @@
+using Coravel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ShowTrack.Data;
 using ShowTrack.Web.Extensions;
+using ShowTrack.Web.Jobs;
 using ShowTrack.Web.Models;
 using ShowTrack.Web.Services;
 
@@ -36,6 +38,8 @@ builder.Services.AddIdentityCore<IdentityUser>()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScheduler();
+
 var app = builder.Build();
 
 app.UseRouting();
@@ -52,6 +56,13 @@ app.MapIdentityApi<IdentityUser>().ManageIdentityApi();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.Services.UseScheduler(schedule =>
+{
+    schedule.Schedule<NotifyShowsNewSeasonJob>()
+            .DailyAt(ShowService.ShowsNotifyTime.Hour, ShowService.ShowsNotifyTime.Minute)
+            .RunOnceAtStart();
+});
 
 await using var scope = app.Services.CreateAsyncScope();
 

@@ -2,12 +2,15 @@
 using OneOf;
 using ShowTrack.Contracts.Dtos;
 using ShowTrack.Data;
+using ShowTrack.Domain.Entities;
 using ShowTrack.Web.Models;
 
 namespace ShowTrack.Web.Services;
 
 public sealed class ShowService(AppDbContext dbContext) : IShowService
 {
+    public static TimeOnly ShowsNotifyTime { get; } = new(10, 0, 0);
+
     public async Task<IReadOnlyCollection<ReadShowDto>> GetAllUserShows(string userId)
     {
         var shows = await dbContext.Shows.Include(s => s.Schedule)
@@ -127,5 +130,35 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
         show.Schedule = null;
 
         return await dbContext.SaveChangesAsync() > 0;
+    }
+
+    public async Task DeleteExpiredSchedules()
+    {
+        var expireTime = DateOnly.FromDateTime(DateTime.Today).ToDateTime(ShowsNotifyTime);
+
+        var expireDate = DateOnly.FromDateTime(DateTime.Today);
+        if (DateTime.Now < expireTime)
+        {
+            expireDate = expireDate.AddDays(-1);
+        }
+
+        var shows = dbContext.Shows.Include(s => s.Schedule)
+                                   .Where(s => s.Schedule != null && s.IsEnded || s.Schedule!.ReleaseDate <= expireDate);
+
+        await shows.ExecuteUpdateAsync(sp => sp.SetProperty(s => s.CurrentSeason, s => s.Schedule!.Season));
+
+        await shows.Select(s => s.Schedule)
+                   .ExecuteDeleteAsync();
+    }
+
+    public async Task<IReadOnlyList<Show>> GetTodayShows()
+    {
+        var shows = await dbContext.Shows.Include(s => s.Schedule)
+                                         .Include(s => s.User)
+                                         .Where(s => !s.IsEnded && s.Schedule != null && s.Schedule.ReleaseDate == DateOnly.FromDateTime(DateTime.Today))
+                                         .AsNoTracking()
+                                         .ToListAsync();
+
+        return shows;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using OneOf;
 using ShowTrack.Contracts.Dtos;
+using ShowTrack.Domain.Entities;
 using ShowTrack.Web.Models;
 
 namespace ShowTrack.Web.Services;
@@ -13,4 +14,6 @@ public interface IShowService
     Task<OneOf<bool, ClientError>> DeleteShow(string userId, string showId);
     Task<OneOf<ReadShowScheduleDto, bool, ClientError>> CreateOrUpdateShowSchedule(string userId, UpdateShowScheduleDto updateShowSchedule);
     Task<OneOf<bool, ClientError>> DeleteShowSchedule(string userId, string showId);
+    Task DeleteExpiredSchedules();
+    Task<IReadOnlyList<Show>> GetTodayShows();
 }
