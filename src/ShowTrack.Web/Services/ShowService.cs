@@ -132,23 +132,21 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
         return await dbContext.SaveChangesAsync() > 0;
     }
 
-    public async Task DeleteExpiredSchedules()
+    public async Task DeleteSchedulesAndUpdateShowSeason(string[] ids)
     {
-        var expireTime = DateOnly.FromDateTime(DateTime.Today).ToDateTime(ShowsNotifyTime);
+        var schedules = await dbContext.ShowSchedules.Include(s => s.Show)
+                                                     .Where(s => ids.Contains(s.Id))
+                                                     .ToListAsync();
 
-        var expireDate = DateOnly.FromDateTime(DateTime.Today);
-        if (DateTime.Now < expireTime)
+
+        foreach (var showSchedule in schedules)
         {
-            expireDate = expireDate.AddDays(-1);
+            showSchedule.Show!.CurrentSeason = showSchedule.Season;
         }
 
-        var shows = dbContext.Shows.Include(s => s.Schedule)
-                                   .Where(s => s.Schedule != null && s.IsEnded || s.Schedule!.ReleaseDate <= expireDate);
+        dbContext.ShowSchedules.RemoveRange(schedules);
 
-        await shows.ExecuteUpdateAsync(sp => sp.SetProperty(s => s.CurrentSeason, s => s.Schedule!.Season));
-
-        await shows.Select(s => s.Schedule)
-                   .ExecuteDeleteAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<IReadOnlyList<Show>> GetTodayShows()

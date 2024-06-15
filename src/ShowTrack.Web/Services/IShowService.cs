@@ -14,6 +14,6 @@ public interface IShowService
     Task<OneOf<bool, ClientError>> DeleteShow(string userId, string showId);
     Task<OneOf<ReadShowScheduleDto, bool, ClientError>> CreateOrUpdateShowSchedule(string userId, UpdateShowScheduleDto updateShowSchedule);
     Task<OneOf<bool, ClientError>> DeleteShowSchedule(string userId, string showId);
-    Task DeleteExpiredSchedules();
     Task<IReadOnlyList<Show>> GetTodayShows();
+    Task DeleteSchedulesAndUpdateShowSeason(string[] ids);
 }

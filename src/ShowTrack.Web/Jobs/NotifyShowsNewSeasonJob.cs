@@ -14,7 +14,7 @@ public class NotifyShowsNewSeasonJob(IShowService showService, IEmailService ema
 
         await Task.WhenAll(todayShows.Select(Notify));
 
-        await showService.DeleteExpiredSchedules();
+        await showService.DeleteSchedulesAndUpdateShowSeason(todayShows.Select(s => s.Schedule!.Id).ToArray());
 
         async Task Notify(Show show)
         {
