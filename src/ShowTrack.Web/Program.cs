@@ -29,7 +29,22 @@ builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 .AddBearerToken(IdentityConstants.BearerScheme)
-                .AddCookie(IdentityConstants.ApplicationScheme);
+                .AddCookie(IdentityConstants.ApplicationScheme, options =>
+                {
+                    options.Events = new()
+                    {
+                        OnRedirectToLogin = context =>
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return Task.CompletedTask;
+                        },
+                        OnRedirectToAccessDenied = context =>
+                        {
+                            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
 
 builder.Services.AddAuthorizationBuilder();
 
