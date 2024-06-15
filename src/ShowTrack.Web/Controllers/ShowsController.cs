@@ -10,7 +10,7 @@ namespace ShowTrack.Web.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class ShowsController(IShowService showService) : ControllerBase
+public sealed class ShowsController(IShowService showService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<ReadShowDto>>> GetAllShows()

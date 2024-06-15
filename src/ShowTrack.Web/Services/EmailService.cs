@@ -5,7 +5,7 @@ using System.Net.Mail;
 
 namespace ShowTrack.Web.Services;
 
-public class EmailService : IEmailService
+public sealed class EmailService : IEmailService
 {
     private readonly ILogger<EmailService> _logger;
     private readonly SmtpClient _smtpClient;

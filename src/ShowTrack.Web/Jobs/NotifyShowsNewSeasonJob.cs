@@ -4,7 +4,7 @@ using ShowTrack.Web.Services;
 
 namespace ShowTrack.Web.Jobs;
 
-public class NotifyShowsNewSeasonJob(IShowService showService, IEmailService emailService) : IInvocable
+public sealed class NotifyShowsNewSeasonJob(IShowService showService, IEmailService emailService) : IInvocable
 {
     private const string NOTIFY_SHOW_TEMPLATE = "Season {0} of {1} is relased today, DON'T MISS IT!";
 

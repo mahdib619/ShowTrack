@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace ShowTrack.Client.Services;
 
-public class ShowsService(HttpClient httpClient) : IShowsService
+public sealed class ShowsService(HttpClient httpClient) : IShowsService
 {
     public async Task<IList<ReadShowDto>?> GetAllShows()
     {

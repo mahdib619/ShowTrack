@@ -7,4 +7,4 @@ public class ApiError
     public object? Details { get; init; }
 }
 
-public class ClientError : ApiError;
+public sealed class ClientError : ApiError;

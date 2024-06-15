@@ -1,6 +1,6 @@
 ﻿namespace ShowTrack.Web.Models;
 
-public class EmailClient
+public sealed class EmailClient
 {
     public required string Host { get; init; }
     public required string UserName { get; init; }
