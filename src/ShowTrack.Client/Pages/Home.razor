@@ -3,6 +3,9 @@
 @using ShowTrack.Contracts.Dtos
 @using ShowTrack.Client.Services
 @using System.Globalization
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
 
 @inject IShowsService ShowsService
 @inject DialogService DialogService
