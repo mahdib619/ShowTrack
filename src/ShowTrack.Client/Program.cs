@@ -12,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.AddApiHttpClient();
 builder.Services.AddScoped<IShowsService, ShowsService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddRadzenComponents();
 

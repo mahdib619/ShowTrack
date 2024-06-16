@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using ShowTrack.Client.Services;
 using System.Net;
 
 namespace ShowTrack.Client.Extensions;
@@ -9,7 +10,8 @@ public static class WebAssemblyHostBuilderExtensions
 {
     public static WebAssemblyHostBuilder AddApiHttpClient(this WebAssemblyHostBuilder builder)
     {
-        
+        builder.Services.AddKeyedScoped<HttpClient>(AccountService.HTTP_CLIENT_NAME);
+
         builder.Services.AddScoped(serviceProvider =>
         {
             var handler = new CookieHandler
