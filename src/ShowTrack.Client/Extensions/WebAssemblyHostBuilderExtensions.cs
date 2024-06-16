@@ -10,7 +10,14 @@ public static class WebAssemblyHostBuilderExtensions
 {
     public static WebAssemblyHostBuilder AddApiHttpClient(this WebAssemblyHostBuilder builder)
     {
-        builder.Services.AddKeyedScoped<HttpClient>(AccountService.HTTP_CLIENT_NAME);
+        builder.Services.AddKeyedScoped<HttpClient>(AccountService.HTTP_CLIENT_NAME, (_, _) =>
+        {
+            var handler = new CookieHandler
+            {
+                InnerHandler = new HttpClientHandler()
+            };
+            return new(handler) { BaseAddress = new(builder.Configuration["BaseAddress"] ?? string.Empty) };
+        });
 
         builder.Services.AddScoped(serviceProvider =>
         {
