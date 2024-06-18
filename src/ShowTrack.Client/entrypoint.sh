@@ -10,4 +10,9 @@ else
   jq --arg baseUrl "$BASE_URL" '.BaseAddress = $baseUrl' /app/wwwroot/appsettings.json > /app/wwwroot/appsettings.tmp.json && mv /app/wwwroot/appsettings.tmp.json /usr/share/nginx/html/appsettings.json
 fi
 
+# Generate nginx conf file from template
+rm /etc/nginx/conf.d/*.conf
+export uri="\$uri" #this variable used by nginx and should no be replaced by envsubst
+envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf
+
 nginx -g "daemon off;"
