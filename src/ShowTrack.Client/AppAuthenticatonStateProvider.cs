@@ -39,9 +39,15 @@ public class AppAuthenticationStateProvider(IAccountService accountService) : Au
         return _currentUserInfo;
     }
 
-    public async Task Login(LoginDto loginParameters)
+    public async Task<bool> Login(LoginDto loginParameters)
     {
-        await accountService.Login(loginParameters);
+        if (await accountService.Login(loginParameters) == false)
+        {
+            return false;
+        }
+
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+
+        return true;
     }
 }

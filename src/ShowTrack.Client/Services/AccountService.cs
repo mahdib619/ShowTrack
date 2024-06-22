@@ -1,4 +1,6 @@
-﻿using ShowTrack.Contracts.Dtos;
+﻿using ShowTrack.Client.Models;
+using ShowTrack.Contracts.Dtos;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace ShowTrack.Client.Services;
@@ -24,6 +26,12 @@ public sealed class AccountService : IAccountService
     public async Task<bool> Login(LoginDto login)
     {
         using var result = await _loginHttpClient.PostAsJsonAsync("login?useCookies=true&useSessionCookies=true", login);
-        return result.IsSuccessStatusCode;
+
+        return result switch
+        {
+            { IsSuccessStatusCode: true } => true,
+            { StatusCode: HttpStatusCode.Unauthorized } => false,
+            _ => throw ClientException.UnknownError
+        };
     }
 }
