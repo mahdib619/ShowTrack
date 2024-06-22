@@ -3,8 +3,11 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <NotAuthorizedPage/>
+                    <NotAuthorizedPage />
                 </NotAuthorized>
+                <Authorizing>
+                    <AuthorizingPage />
+                </Authorizing>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
