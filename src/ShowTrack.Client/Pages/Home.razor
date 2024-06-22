@@ -4,14 +4,11 @@
 @using ShowTrack.Client.Services
 @using System.Globalization
 @using Microsoft.AspNetCore.Authorization
-@using ShowTrack.Client.Shared
 
 @attribute [Authorize]
 
 @inject IShowsService ShowsService
 @inject DialogService DialogService
-
-<PageTitle>Home</PageTitle>
 
 <div style="margin-top:10px">
     <RadzenRow Style="padding-right:18px">
