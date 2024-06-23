@@ -1,0 +1,27 @@
+﻿#nav-menu, #nav-menu ::deep .rz-menu {
+    background-color: var(--rz-panel-menu-background-color) !important;
+}
+
+#nav-links ::deep .rz-navigation-item-wrapper-active:before {
+    transform: rotate(90deg) translateX(24px) translateY(-32px) scaleX(1.2) scaleY(2);
+}
+
+#nav-links ::deep * {
+    line-height: 100%;
+    height: 100%;
+}
+
+#nav-links ::deep a span {
+    height: 0;
+    line-height: 0;
+}
+
+#login-section ::deep .rz-panel-menu {
+    border-left-color: inherit;
+    border-left-style: solid;
+    border-left-width: 1px
+}
+
+#login-section ::deep a {
+    line-height: 27.2px;
+}

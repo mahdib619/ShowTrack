@@ -1,6 +1,55 @@
-﻿<RadzenPanelMenu ShowArrow="false" DisplayStyle="MenuItemDisplayStyle.Text" Match="NavLinkMatch.Prefix">
-    <RadzenPanelMenuItem Text="Home" Path="/"></RadzenPanelMenuItem>
-</RadzenPanelMenu>
+﻿@using ShowTrack.Client.Extensions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div id="nav-menu">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+        <div id="nav-links">
+            <RadzenStack>
+                <RadzenPanelMenu ShowArrow="false" DisplayStyle="MenuItemDisplayStyle.Text" Match="NavLinkMatch.Prefix">
+                    <RadzenStack Orientation="Orientation.Horizontal" Gap="0">
+                        <RadzenStack>
+                            <RadzenPanelMenuItem Text="Home" Path="/" />
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenPanelMenu>
+            </RadzenStack>
+        </div>
+        <RadzenStack>
+            @if (!string.IsNullOrWhiteSpace(_email))
+            {
+                <RadzenProfileMenu>
+                    <Template>
+                        <RadzenGravatar Email="@_email"></RadzenGravatar>
+                    </Template>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Edit Picture (Gravatar)" Path="https://gravatar.com/profile/avatars" Target="_blank"/>
+                        <RadzenProfileMenuItem Text="Logout" Path="/logout"/>
+                    </ChildContent>
+                </RadzenProfileMenu>
+            }
+            else
+            {
+                <div id="login-section">
+                    <RadzenPanelMenu>
+                        <RadzenPanelMenuItem Path="/login" Text="Login" Style="line-height:27.2px;" />
+                    </RadzenPanelMenu>
+                </div>
+            }
+        </RadzenStack>
+    </RadzenStack>
+
+</div>
+
 @code {
+    private string? _email;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity?.IsAuthenticated is true)
+        {
+            _email = authState.User.GetEmail();
+        }
+    }
 
 }
