@@ -50,4 +50,11 @@ public class AppAuthenticationStateProvider(IAccountService accountService) : Au
 
         return true;
     }
+
+    public async Task Logout()
+    {
+        await accountService.Logout();
+        _currentUserInfo = null;
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
 }

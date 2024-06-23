@@ -34,4 +34,9 @@ public sealed class AccountService : IAccountService
             _ => throw ClientException.UnknownError
         };
     }
+
+    public async Task Logout()
+    {
+        await _loginHttpClient.PostAsync("/logout", null);
+    }
 }

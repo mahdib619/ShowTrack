@@ -6,4 +6,5 @@ public interface IAccountService
 {
     Task<UserInfo> GetCurrentUser();
     Task<bool> Login(LoginDto login);
+    Task Logout();
 }

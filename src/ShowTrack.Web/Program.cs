@@ -76,6 +76,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapIdentityApi<IdentityUser>().ManageIdentityApi();
+app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager) =>
+{
+    await signInManager.SignOutAsync().ConfigureAwait(false);
+}).RequireAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI();
