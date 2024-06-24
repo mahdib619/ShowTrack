@@ -2,3 +2,14 @@
     min-height: 72px;
     background-color: var(--rz-secondary-lighter);
 }
+
+::deep .rz-datalist-content {
+    overflow-y: scroll;
+    max-height: 550px;
+}
+
+::deep .rz-paginator {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}

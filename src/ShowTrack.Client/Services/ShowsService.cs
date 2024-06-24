@@ -5,9 +5,16 @@ namespace ShowTrack.Client.Services;
 
 public sealed class ShowsService(HttpClient httpClient) : IShowsService
 {
-    public async Task<IList<ReadShowDto>?> GetAllShows()
+    public async Task<PagedResponseDto<ReadShowDto>?> GetAllShows(int? page, int? count)
     {
-        return await httpClient.GetFromJsonAsync<IList<ReadShowDto>>("api/Shows");
+        var query = string.Empty;
+
+        if (page is not null && count is not null)
+        {
+            query = $"?{nameof(page)}={page}&{nameof(count)}={count}";
+        }
+
+        return await httpClient.GetFromJsonAsync<PagedResponseDto<ReadShowDto>>("api/Shows" + query);
     }
 
     public async Task<ReadShowDto?> GetSingleShow(string id)

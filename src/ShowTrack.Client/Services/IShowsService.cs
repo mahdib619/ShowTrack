@@ -4,7 +4,7 @@ namespace ShowTrack.Client.Services;
 
 public interface IShowsService
 {
-    Task<IList<ReadShowDto>?> GetAllShows();
+    Task<PagedResponseDto<ReadShowDto>?> GetAllShows(int? page, int? count);
     Task<ReadShowDto?> GetSingleShow(string id);
     Task<ReadShowDto> CreateShow(CreateShowDto showCreate);
     Task UpdateShow(UpdateShowDto showUpdate);
