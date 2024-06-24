@@ -13,10 +13,10 @@ namespace ShowTrack.Web.Controllers;
 public sealed class ShowsController(IShowService showService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyCollection<ReadShowDto>>> GetAllShows()
+    public async Task<ActionResult<PagedResponseDto<ReadShowDto>>> GetAllShows(int? page = null, int? count = null)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var shows = await showService.GetAllUserShows(userId);
+        var shows = await showService.GetAllUserShows(userId, page, count);
         return Ok(shows);
     }
 
@@ -26,6 +26,19 @@ public sealed class ShowsController(IShowService showService) : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var show = await showService.GetShow(userId, id);
         return Ok(show);
+    }
+
+    [HttpPost("testData")]
+    public async Task<ActionResult> TestData()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+        for (var i = 0; i < 100; i++)
+        {
+            await showService.CreateShow(new() { CurrentSeason = i, Title = "TestShow", UserId = userId });
+        }
+
+        return Ok();
     }
 
     [HttpPost]

@@ -11,14 +11,26 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
 {
     public static TimeOnly ShowsNotifyTime { get; } = new(10, 0, 0);
 
-    public async Task<IReadOnlyCollection<ReadShowDto>> GetAllUserShows(string userId)
+    public async Task<PagedResponseDto<ReadShowDto>> GetAllUserShows(string userId, int? page, int? count)
     {
-        var shows = await dbContext.Shows.Include(s => s.Schedule)
-                                         .Where(s => s.UserId == userId)
-                                         .Select(s => ReadShowDto.FromEntity(s))
-                                         .ToListAsync();
+        var showsQuery = dbContext.Shows.Include(s => s.Schedule)
+                                        .Where(s => s.UserId == userId)
+                                        .OrderBy(s => s.CurrentSeason)
+                                        .Select(s => ReadShowDto.FromEntity(s));
 
-        return shows;
+        var totalCount = await showsQuery.CountAsync();
+
+        if (page is not null && count is not null)
+        {
+            showsQuery = showsQuery.Skip((page.Value - 1) * count.Value)
+                                   .Take(count.Value);
+        }
+
+        var response = new PagedResponseDto<ReadShowDto>(items: await showsQuery.ToArrayAsync(),
+                                                         totalCount: totalCount,
+                                                         page: page ?? 1);
+
+        return response;
     }
 
     public async Task<ReadShowDto?> GetShow(string userId, string showId)

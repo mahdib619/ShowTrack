@@ -7,7 +7,7 @@ namespace ShowTrack.Web.Services;
 
 public interface IShowService
 {
-    Task<IReadOnlyCollection<ReadShowDto>> GetAllUserShows(string userId);
+    Task<PagedResponseDto<ReadShowDto>> GetAllUserShows(string userId, int? page, int? count);
     Task<ReadShowDto?> GetShow(string userId, string showId);
     Task<ReadShowDto> CreateShow(CreateShowDto showCreate);
     Task<OneOf<bool, ClientError>> UpdateShow(string userId, UpdateShowDto showUpdate);
