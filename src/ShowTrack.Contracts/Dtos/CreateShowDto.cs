@@ -14,6 +14,6 @@ public sealed class CreateShowDto
     {
         Title = Title,
         UserId = UserId,
-        CurrentSeason = CurrentSeason?.ToString() ?? string.Empty
+        CurrentSeason = CurrentSeason ?? 0
     };
 }

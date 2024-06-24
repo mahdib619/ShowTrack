@@ -9,5 +9,5 @@ public sealed class ShowSchedule
 
     public DateOnly ReleaseDate { get; set; }
 
-    public required string Season { get; set; }
+    public required int Season { get; set; }
 }

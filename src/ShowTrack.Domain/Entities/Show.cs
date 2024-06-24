@@ -11,7 +11,7 @@ public sealed class Show
     public required string UserId { get; init; }
     public IdentityUser? User { get; init; }
 
-    public required string CurrentSeason { get; set; }
+    public int CurrentSeason { get; set; }
 
     public ShowSchedule? Schedule { get; set; }
 

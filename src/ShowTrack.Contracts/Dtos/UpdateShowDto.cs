@@ -6,7 +6,7 @@ public sealed class UpdateShowDto
 {
     public required string Id { get; set; }
     public required string Title { get; init; }
-    public required string CurrentSeason { get; init; }
+    public required int CurrentSeason { get; init; }
     public required bool IsEnded { get; set; }
 
     public void UpdateEntity(Show show)

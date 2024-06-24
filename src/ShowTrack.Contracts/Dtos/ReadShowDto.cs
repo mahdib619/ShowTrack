@@ -7,7 +7,7 @@ public sealed class ReadShowDto
     public required string Id { get; init; }
     public required string Title { get; init; }
     public required string UserId { get; init; }
-    public required string CurrentSeason { get; init; }
+    public int CurrentSeason { get; init; }
     public ReadShowScheduleDto? Schedule { get; set; }
     public bool IsEnded { get; init; }
 

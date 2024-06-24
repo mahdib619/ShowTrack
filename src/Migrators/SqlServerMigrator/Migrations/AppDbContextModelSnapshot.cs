@@ -17,7 +17,7 @@ namespace SqlServerMigrator.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -227,10 +227,9 @@ namespace SqlServerMigrator.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<string>("CurrentSeason")
-                        .IsRequired()
+                    b.Property<int>("CurrentSeason")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsEnded")
                         .HasColumnType("bit");
@@ -262,10 +261,9 @@ namespace SqlServerMigrator.Migrations
                     b.Property<DateOnly>("ReleaseDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("Season")
-                        .IsRequired()
+                    b.Property<int>("Season")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<string>("ShowId")
                         .IsRequired()

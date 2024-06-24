@@ -12,12 +12,12 @@ public sealed class UpdateShowScheduleDto
     {
         ShowId = ShowId,
         ReleaseDate = ReleaseDate,
-        Season = Season?.ToString() ?? string.Empty
+        Season = Season ?? 0
     };
 
     public void UpdateEntity(ShowSchedule schedule)
     {
         schedule.ReleaseDate = ReleaseDate;
-        schedule.Season = Season?.ToString() ?? string.Empty;
+        schedule.Season = Season ?? 0;
     }
 }
