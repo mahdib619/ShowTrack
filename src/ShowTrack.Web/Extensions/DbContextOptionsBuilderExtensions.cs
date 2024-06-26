@@ -6,6 +6,7 @@ public static class DbContextOptionsBuilderExtensions
 {
     private const string MSSQL = "mssql";
     private const string NPGSQL = "npgsql";
+    private const string MEMORY = "memory";
 
     public static DbContextOptionsBuilder UseDatabase(this DbContextOptionsBuilder builder, string? dbProvider, IConfiguration configuration)
     {
@@ -29,6 +30,8 @@ public static class DbContextOptionsBuilderExtensions
                     opt.MigrationsAssembly("PostgresqlMigrator");
                 }
             ),
+
+            MEMORY => builder.UseInMemoryDatabase("MyShows"),
 
             _ => throw new InvalidOperationException($"Unsupported provider: {dbProvider}")
         };

@@ -86,7 +86,11 @@ app.UseSwaggerUI();
 
 await using var scope = app.Services.CreateAsyncScope();
 
-await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+var database =  scope.ServiceProvider.GetRequiredService<AppDbContext>().Database;
+if (database.IsRelational())
+{
+    await database.MigrateAsync();
+}
 
 await scope.ServiceProvider.SeedData(app.Configuration);
 
