@@ -10,25 +10,8 @@ namespace PostgresqlMigrator.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
-                name: "Season",
-                table: "ShowSchedules",
-                type: "integer",
-                maxLength: 10,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(10)",
-                oldMaxLength: 10);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "CurrentSeason",
-                table: "Shows",
-                type: "integer",
-                maxLength: 10,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character varying(10)",
-                oldMaxLength: 10);
+            migrationBuilder.Sql(@"ALTER TABLE ""ShowSchedules"" ALTER COLUMN ""Season"" TYPE integer USING (Season::integer);");
+            migrationBuilder.Sql(@"ALTER TABLE ""Shows"" ALTER COLUMN ""CurrentSeason"" TYPE integer USING (Season::integer);");
         }
 
         /// <inheritdoc />
