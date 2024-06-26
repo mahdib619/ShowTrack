@@ -30,12 +30,11 @@ COPY --from=build /app/publish/wwwroot .
 # Copy custom Nginx configuration template file
 COPY --from=build /app/publish/nginx.conf.template /etc/nginx/nginx.conf.template
 
-# Copy the appsettings.json file and the update script
-COPY --from=build /app/publish/wwwroot/appsettings.json /app/wwwroot/appsettings.json
-COPY --from=build /app/publish/entrypoint.sh /app/entrypoint.sh
+# Copy the entrypint file
+COPY --from=build /app/publish/entrypoint.sh /entrypoint.sh
 
 # Make the update script executable
-RUN chmod +x /app/entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Expose the port that Nginx is running on (default to 80)
 EXPOSE 80
@@ -45,4 +44,4 @@ ENV PORT=80
 ENV SERVER_NAME=0.0.0.0
 ENV BASE_URL=https://localhost:8000/
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
