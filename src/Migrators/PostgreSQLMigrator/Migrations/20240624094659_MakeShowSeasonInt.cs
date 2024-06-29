@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.Metrics;
+using System.Net.NetworkInformation;
+using System;
 
 #nullable disable
 
@@ -10,15 +14,15 @@ namespace PostgresqlMigrator.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"ALTER TABLE ""ShowSchedules"" ALTER COLUMN ""Season"" TYPE integer USING (Season::integer);");
-            migrationBuilder.Sql(@"ALTER TABLE ""Shows"" ALTER COLUMN ""CurrentSeason"" TYPE integer USING (Season::integer);");
+            migrationBuilder.Sql(@"ALTER TABLE ""Shows"" ALTER COLUMN ""CurrentSeason"" TYPE integer USING ""CurrentSeason""::integer;");
+            migrationBuilder.Sql(@"ALTER TABLE ""ShowSchedules"" ALTER COLUMN ""Season"" TYPE integer USING ""Season""::integer; ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "Season",
+            name: "Season",
                 table: "ShowSchedules",
                 type: "character varying(10)",
                 maxLength: 10,
