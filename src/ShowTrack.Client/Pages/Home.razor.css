@@ -13,3 +13,9 @@
     position: fixed;
     bottom: 0;
 }
+
+@media only screen and (max-width: 576px) {
+    ::deep .rz-datalist-content {
+        max-height: 350px;
+    }
+}
