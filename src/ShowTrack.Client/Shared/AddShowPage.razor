@@ -13,17 +13,14 @@
             </RadzenColumn>
             <RadzenColumn Size="12" SizeSM="2">
                 <RadzenFormField Text="Season" Style="width: 100%;">
-                    <RadzenNumeric Min="1"  Name="ShowSeason" TValue="int?" ShowUpDown="false" @bind-Value="@NewShow.CurrentSeason" Style="width: 100%;" />
+                    <RadzenNumeric Min="1" Name="ShowSeason" TValue="int?" ShowUpDown="false" @bind-Value="@NewShow.CurrentSeason" Style="width: 100%;" />
                 </RadzenFormField>
                 <RadzenCustomValidator @ref="_seasonValidator" Component="ShowSeason" Validator="ValidateSeason"></RadzenCustomValidator>
             </RadzenColumn>
         </RadzenRow>
-        <RadzenRow RowGap="15">
+        <RadzenRow RowGap="15" Gap="5">
             <RadzenColumn Size="12" />
-            <RadzenColumn Size="4" Offset="4" SizeSM="2" OffsetSM="8">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="() => DialogService.Close(null)" Text="Cancel" Style="width:100%" />
-            </RadzenColumn>
-            <RadzenColumn Size="4" SizeSM="2">
+            <RadzenColumn Offset="8" Size="4" OffsetSM="10" SizeSM="2">
                 <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Text="Add" Style="width:100%" />
             </RadzenColumn>
         </RadzenRow>

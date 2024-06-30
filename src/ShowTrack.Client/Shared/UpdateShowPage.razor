@@ -1,0 +1,64 @@
+﻿@using ShowTrack.Contracts.Dtos
+
+@inject DialogService DialogService
+
+<div>
+    <RadzenTemplateForm TItem="ReadShowDto" Data="Show" Submit="() => DialogService.Close(Show)">
+        <RadzenRow Gap="10">
+            <RadzenColumn Size="12" SizeSM="10">
+                <RadzenFormField Text="Title" Style="width: 100%;">
+                    <RadzenTextBox Name="ShowTitle" @bind-Value="@Show.Title" Style="width: 100%;" />
+                </RadzenFormField>
+                <RadzenRequiredValidator Component="ShowTitle" Text="Title is required." />
+            </RadzenColumn>
+            <RadzenColumn Size="12" SizeSM="2">
+                <RadzenFormField Text="Season" Style="width: 100%;">
+                    <RadzenNumeric Min="1" Name="ShowSeason" TValue="int" ShowUpDown="false" @bind-Value="@Show.CurrentSeason" Style="width: 100%;" />
+                </RadzenFormField>
+                <RadzenCustomValidator @ref="_seasonValidator" Component="ShowSeason" Validator="ValidateSeason"></RadzenCustomValidator>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow RowGap="15">
+            <RadzenColumn Size="12" />
+            <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" Style="width:100%;">
+                <RadzenStack>
+                    <RadzenSelectBar Attributes="@(new Dictionary<string, object> {["type"]="checkbox"})" TValue="bool" @bind-Value="@Show.IsEnded">
+                        <Items>
+                            <RadzenSelectBarItem Text="on-going" Value="false" />
+                            <RadzenSelectBarItem Text="ended" Value="true" />
+                        </Items>
+                    </RadzenSelectBar>
+                </RadzenStack>
+                <RadzenStack>
+                    <RadzenColumn Size="4" SizeSM="2">
+                        <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Text="Update" Style="width:100%" />
+                    </RadzenColumn>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenRow>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    [Parameter]
+    public required ReadShowDto Show { get; set; }
+
+    private RadzenCustomValidator _seasonValidator = new();
+
+    private bool ValidateSeason()
+    {
+        switch (Show.CurrentSeason)
+        {
+            case > 0:
+                return true;
+            case 0:
+                _seasonValidator.Text = "Season is required.";
+                break;
+            default:
+                _seasonValidator.Text = "Invalid season!";
+                break;
+        }
+
+        return false;
+    }
+}

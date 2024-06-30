@@ -48,7 +48,7 @@
                             @if (!showsWithDeletePrompt.Contains(show.Id))
                             {
                                 <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
-                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
+                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
                                 <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
                             }
                             else
@@ -87,7 +87,7 @@
 
     private async Task AddShow()
     {
-        CreateShowDto? newShow = await DialogService.OpenAsync<AddShowPage>("New Show", null, new() { ShowClose = false, CloseDialogOnOverlayClick = true });
+        CreateShowDto? newShow = await DialogService.OpenAsync<AddShowPage>("New Show", null, new() { CloseDialogOnOverlayClick = true });
 
         if (newShow is null)
             return;
@@ -97,10 +97,20 @@
         await showDataList.Reload();
     }
 
+    private async Task UpdateShow(ReadShowDto show)
+    {
+        show = await DialogService.OpenAsync<UpdateShowPage>("Update Show", new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
+
+        if (show is null)
+            return;
+
+        await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
+    }
+
     private async Task AddSchedule(ReadShowDto show)
     {
         UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>(show.Schedule is null ? "Add Schedule" : "Update Schedule",
-                                                                                             new() { ["Show"] = show }, new() { ShowClose = true, CloseDialogOnOverlayClick = true });
+                                                                                             new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
 
         if (newSchedule is null)
             return;

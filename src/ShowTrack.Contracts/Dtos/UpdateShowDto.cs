@@ -5,8 +5,8 @@ namespace ShowTrack.Contracts.Dtos;
 public sealed class UpdateShowDto
 {
     public required string Id { get; set; }
-    public required string Title { get; init; }
-    public required int CurrentSeason { get; init; }
+    public required string Title { get; set; }
+    public required int CurrentSeason { get; set; }
     public required bool IsEnded { get; set; }
 
     public void UpdateEntity(Show show)
@@ -15,4 +15,12 @@ public sealed class UpdateShowDto
         show.CurrentSeason = CurrentSeason;
         show.IsEnded = IsEnded;
     }
+
+    public static UpdateShowDto FromReadDto(ReadShowDto readDto) => new()
+    {
+        Id = readDto.Id,
+        Title = readDto.Title,
+        CurrentSeason = readDto.CurrentSeason,
+        IsEnded = readDto.IsEnded
+    };
 }

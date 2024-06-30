@@ -5,11 +5,11 @@ namespace ShowTrack.Contracts.Dtos;
 public sealed class ReadShowDto
 {
     public required string Id { get; init; }
-    public required string Title { get; init; }
-    public required string UserId { get; init; }
-    public int CurrentSeason { get; init; }
+    public required string Title { get; set; }
+    public required string UserId { get; set; }
+    public int CurrentSeason { get; set; }
     public ReadShowScheduleDto? Schedule { get; set; }
-    public bool IsEnded { get; init; }
+    public bool IsEnded { get; set; }
 
     public static ReadShowDto FromEntity(Show entity) => new()
     {
