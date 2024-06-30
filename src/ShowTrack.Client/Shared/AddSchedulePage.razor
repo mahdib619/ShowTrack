@@ -21,13 +21,10 @@
                 <RadzenCustomValidator @ref="_seasonValidator" Component="ScheduleSeason" Validator="ValidateSeason"></RadzenCustomValidator>
             </RadzenColumn>
         </RadzenRow>
-        <RadzenRow RowGap="15">
+        <RadzenRow RowGap="15" Gap="0">
             <RadzenColumn Size="12" />
-            <RadzenColumn Size="4" Offset="4" SizeSM="2" OffsetSM="8">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Click="() => DialogService.Close(null)" Text="Cancel" Style="width:100%" />
-            </RadzenColumn>
-            <RadzenColumn Size="4" SizeSM="2">
-                <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Text="Update" Style="width:100%" />
+            <RadzenColumn Offset="8" Size="4" OffsetSM="10" SizeSM="2">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Text="@(isUpdate ? "Update" : "Add")" Style="width:100%" />
             </RadzenColumn>
         </RadzenRow>
     </RadzenTemplateForm>
@@ -41,10 +38,12 @@
 
     private int minSeason;
     private UpdateShowScheduleDto? NewSchedule;
+    private bool isUpdate;
 
     protected override Task OnInitializedAsync()
     {
         minSeason = Show.CurrentSeason;
+        isUpdate = Show.Schedule is not null;
 
         NewSchedule = new()
         {

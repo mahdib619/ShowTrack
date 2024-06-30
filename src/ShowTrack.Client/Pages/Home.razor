@@ -47,7 +47,7 @@
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
                             @if (!showsWithDeletePrompt.Contains(show.Id))
                             {
-                                <RadzenButton Icon="event_available" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
+                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
                                 <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
                                 <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
                             }
@@ -99,9 +99,8 @@
 
     private async Task AddSchedule(ReadShowDto show)
     {
-        UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>("Update Schedule",
-                                                                                             new() { ["Show"] = show },
-                                                                                             new() { ShowClose = false, CloseDialogOnOverlayClick = true });
+        UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>(show.Schedule is null ? "Add Schedule" : "Update Schedule",
+                                                                                             new() { ["Show"] = show }, new() { ShowClose = true, CloseDialogOnOverlayClick = true });
 
         if (newSchedule is null)
             return;

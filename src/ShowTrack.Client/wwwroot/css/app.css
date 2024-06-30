@@ -88,3 +88,7 @@ code {
 .rz-tooltip.show-schedule .rz-tooltip-content {
     background-color: var(--rz-primary) !important;
 }
+
+.rz-dialog-titlebar-close {
+    cursor: pointer;
+}
