@@ -13,7 +13,7 @@
 
 <div style="margin-top:10px">
     <RadzenRow Style="padding-right:18px;margin-bottom:10px;">
-        <RadzenColumn Offset="9" Size="3" OffsetSM="10" SizeSM="2" OffsetLG="11" SizeLG="1">
+        <RadzenColumn OffsetXS="8" SizeXS="4" Offset="9" Size="3" OffsetSM="10" SizeSM="2" OffsetLG="11" SizeLG="1">
             <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Style="width:100%" Click="AddShow" />
         </RadzenColumn>
     </RadzenRow>
@@ -45,9 +45,17 @@
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeSM="2" Class="rz-py-4">
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
-                            <RadzenButton Icon="event_available" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
-                            <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
-                            <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
+                            @if (!showsWithDeletePrompt.Contains(show.Id))
+                            {
+                                <RadzenButton Icon="event_available" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
+                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
+                                <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
+                            }
+                            else
+                            {
+                                <RadzenButton Text="Delete" Style="width: 32%" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteShow(show)" />
+                                <RadzenButton Text="Cancel" Style="width: 32%" ButtonStyle="ButtonStyle.Secondary" Click="() => CancelDelete(show)" />
+                            }
                         </RadzenStack>
                     </RadzenColumn>
                 </RadzenRow>
@@ -64,6 +72,7 @@
     RadzenDataList<ReadShowDto> showDataList = new();
     PagedResponseDto<ReadShowDto>? pagedShows;
     ICollection<ReadShowDto>? shows;
+    readonly HashSet<string> showsWithDeletePrompt = [];
 
     private async Task LoadData(LoadDataArgs loadArgs)
     {
@@ -102,7 +111,24 @@
         show.Schedule = (await ShowsService.GetSingleShow(show.Id))?.Schedule;
     }
 
-    void ShowTooltip(ElementReference elementReference, string text, string cssClass)
+    private void PromptDelete(ReadShowDto show)
+    {
+        showsWithDeletePrompt.Add(show.Id);
+    }
+
+    private void CancelDelete(ReadShowDto show)
+    {
+        showsWithDeletePrompt.Remove(show.Id);
+    }
+
+    private async Task DeleteShow(ReadShowDto show)
+    {
+        await ShowsService.DeleteShow(show.Id);
+        await showDataList.Reload();
+        showsWithDeletePrompt.Remove(show.Id);
+    }
+
+    private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
     {
         TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
     }
