@@ -9,10 +9,11 @@
 
 @inject IShowsService ShowsService
 @inject DialogService DialogService
+@inject TooltipService TooltipService
 
 <div style="margin-top:10px">
     <RadzenRow Style="padding-right:18px;margin-bottom:10px;">
-        <RadzenColumn Size="4" Offset="8" OffsetLG="11" SizeLG="1">
+        <RadzenColumn Offset="9" Size="3" OffsetSM="10" SizeSM="2" OffsetLG="11" SizeLG="1">
             <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Style="width:100%" Click="AddShow" />
         </RadzenColumn>
     </RadzenRow>
@@ -22,28 +23,32 @@
         <Template Context="show">
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4 show-title">
+                    <RadzenColumn Size="12" SizeSM="2" Class="rz-p-4 show-title">
                         <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(show.Title)</RadzenText>
                     </RadzenColumn>
 
-                    <RadzenColumn Size="12" SizeLG="8" Class="rz-p-4">
+                    <RadzenColumn Size="12" SizeSM="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="1" Style="padding-right:80px">
+                            <RadzenColumn Size="12" SizeSM="1" Style="padding-right:80px">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Season</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.CurrentSeason)</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="3">
+                            <RadzenColumn Size="12" SizeSM="3">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Next Season On</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.Schedule?.ReleaseDate.ToString("yyyy-MM-dd", new CultureInfo("en-us")) ?? "-")</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeMD="6" SizeLG="4">
+                            <RadzenColumn Size="12" SizeSM="4">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">State</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.IsEnded ? "ended" : "on-going")</RadzenText>
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
-                    <RadzenColumn Size="12" SizeLG="2" Class="rz-p-4">
-                        <RadzenButton Text="Schedule" Style="width: 100%" Click="()=>AddSchedule(show)" />
+                    <RadzenColumn Size="12" SizeSM="2" Class="rz-py-4">
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
+                            <RadzenButton Icon="event_available" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
+                            <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
+                            <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => AddSchedule(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
+                        </RadzenStack>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
@@ -95,5 +100,10 @@
         await ShowsService.CreateOrUpdateShowSchedule(newSchedule);
 
         show.Schedule = (await ShowsService.GetSingleShow(show.Id))?.Schedule;
+    }
+
+    void ShowTooltip(ElementReference elementReference, string text, string cssClass)
+    {
+        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
     }
 }

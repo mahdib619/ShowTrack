@@ -75,3 +75,16 @@
 code {
     color: #c02d76;
 }
+
+.rz-tooltip.show-edit .rz-tooltip-content {
+    background-color: var(--rz-warning) !important;
+}
+
+
+.rz-tooltip.show-delete .rz-tooltip-content {
+    background-color: var(--rz-danger) !important;
+}
+
+.rz-tooltip.show-schedule .rz-tooltip-content {
+    background-color: var(--rz-primary) !important;
+}
