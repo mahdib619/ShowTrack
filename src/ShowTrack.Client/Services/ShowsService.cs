@@ -1,20 +1,14 @@
-﻿using ShowTrack.Contracts.Dtos;
+﻿using ShowTrack.Client.Models.Dtos;
+using ShowTrack.Contracts.Dtos;
 using System.Net.Http.Json;
 
 namespace ShowTrack.Client.Services;
 
 public sealed class ShowsService(HttpClient httpClient) : IShowsService
 {
-    public async Task<PagedResponseDto<ReadShowDto>?> GetAllShows(int? page, int? count)
+    public async Task<PagedResponseDto<ReadShowDto>?> GetAllShows(PagedRequestDto request)
     {
-        var query = string.Empty;
-
-        if (page is not null && count is not null)
-        {
-            query = $"?{nameof(page)}={page}&{nameof(count)}={count}";
-        }
-
-        return await httpClient.GetFromJsonAsync<PagedResponseDto<ReadShowDto>>("api/Shows" + query);
+        return await httpClient.GetFromJsonAsync<PagedResponseDto<ReadShowDto>>("api/Shows" + request.ToQueryString());
     }
 
     public async Task<ReadShowDto?> GetSingleShow(string id)

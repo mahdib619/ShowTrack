@@ -3,17 +3,28 @@
 @using ShowTrack.Contracts.Dtos
 @using ShowTrack.Client.Services
 @using System.Globalization
+@using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Authorization
+@using ShowTrack.Client.Models.Dtos
 
 @attribute [Authorize]
 
 @inject IShowsService ShowsService
 @inject DialogService DialogService
 @inject TooltipService TooltipService
+@inject ILocalStorageService LocalStorage
 
 <div style="margin-top:10px">
-    <RadzenRow Style="padding-right:18px;margin-bottom:10px;">
-        <RadzenColumn OffsetXS="8" SizeXS="4" Offset="9" Size="3" OffsetSM="10" SizeSM="2" OffsetLG="11" SizeLG="1">
+    <RadzenRow Style="padding-right:18px;margin-bottom:10px;" JustifyContent="JustifyContent.SpaceBetween">
+        <RadzenColumn Style="padding-left:5px;">
+            <RadzenSelectBar TValue="bool" Value="@onlyDisplayOnGoingShows" ValueChanged="DisplayFilterChanged">
+                <Items>
+                    <RadzenSelectBarItem Text="All Shows" Value="false" />
+                    <RadzenSelectBarItem Text="On-going Shows" Value="true" />
+                </Items>
+            </RadzenSelectBar>
+        </RadzenColumn>
+        <RadzenColumn SizeXS="4" Size="3" SizeSM="2" SizeLG="1">
             <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Style="width:100%" Click="AddShow" />
         </RadzenColumn>
     </RadzenRow>
@@ -73,12 +84,25 @@
     PagedResponseDto<ReadShowDto>? pagedShows;
     ICollection<ReadShowDto>? shows;
     readonly HashSet<string> showsWithDeletePrompt = [];
+    bool onlyDisplayOnGoingShows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        onlyDisplayOnGoingShows = await LocalStorage.GetItemAsync<bool>(nameof(onlyDisplayOnGoingShows));
+    }
 
     private async Task LoadData(LoadDataArgs loadArgs)
     {
         isLoading = true;
 
-        pagedShows = await ShowsService.GetAllShows((loadArgs.Skip / loadArgs.Top) + 1, loadArgs.Top);
+        var request = new PagedRequestDto
+        {
+            Page = (loadArgs.Skip / loadArgs.Top) + 1,
+            Count = loadArgs.Top,
+            FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null
+        };
+
+        pagedShows = await ShowsService.GetAllShows(request);
         shows = pagedShows?.Items;
         showsCount = pagedShows?.TotalCount ?? 0;
 
@@ -105,6 +129,8 @@
             return;
 
         await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
+
+        await showDataList.Reload();
     }
 
     private async Task AddSchedule(ReadShowDto show)
@@ -140,5 +166,12 @@
     private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
     {
         TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
+    }
+
+    private async Task DisplayFilterChanged(bool value)
+    {
+        onlyDisplayOnGoingShows = value;
+        await LocalStorage.SetItemAsync(nameof(onlyDisplayOnGoingShows), onlyDisplayOnGoingShows);
+        await showDataList.Reload();
     }
 }
