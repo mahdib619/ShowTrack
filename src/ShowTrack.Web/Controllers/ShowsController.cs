@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using ShowTrack.Contracts.Dtos;
 using ShowTrack.Web.Extensions;
+using ShowTrack.Web.Models.Dtos;
 using ShowTrack.Web.Services;
 using System.Security.Claims;
 
@@ -13,10 +15,11 @@ namespace ShowTrack.Web.Controllers;
 public sealed class ShowsController(IShowService showService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PagedResponseDto<ReadShowDto>>> GetAllShows(int? page = null, int? count = null)
+    public async Task<ActionResult<PagedResponseDto<ReadShowDto>>> GetAllShows([FromQuery] PagedRequestDto<JObject> request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var shows = await showService.GetAllUserShows(userId, page, count);
+        ((dynamic)request.FilterObj!).UserId = userId;
+        var shows = await showService.GetAllUserShows(request);
         return Ok(shows);
     }
 

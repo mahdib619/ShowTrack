@@ -2,12 +2,13 @@
 using ShowTrack.Contracts.Dtos;
 using ShowTrack.Domain.Entities;
 using ShowTrack.Web.Models;
+using ShowTrack.Web.Models.Dtos;
 
 namespace ShowTrack.Web.Services;
 
 public interface IShowService
 {
-    Task<PagedResponseDto<ReadShowDto>> GetAllUserShows(string userId, int? page, int? count);
+    Task<PagedResponseDto<ReadShowDto>> GetAllUserShows<TFilter>(PagedRequestDto<TFilter> request) where TFilter : class;
     Task<ReadShowDto?> GetShow(string userId, string showId);
     Task<ReadShowDto> CreateShow(CreateShowDto showCreate);
     Task<OneOf<bool, ClientError>> UpdateShow(string userId, UpdateShowDto showUpdate);

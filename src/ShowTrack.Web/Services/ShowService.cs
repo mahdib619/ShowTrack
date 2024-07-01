@@ -3,7 +3,9 @@ using OneOf;
 using ShowTrack.Contracts.Dtos;
 using ShowTrack.Data;
 using ShowTrack.Domain.Entities;
+using ShowTrack.Web.Extensions;
 using ShowTrack.Web.Models;
+using ShowTrack.Web.Models.Dtos;
 
 namespace ShowTrack.Web.Services;
 
@@ -11,24 +13,12 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
 {
     public static TimeOnly ShowsNotifyTime { get; } = new(10, 0, 0);
 
-    public async Task<PagedResponseDto<ReadShowDto>> GetAllUserShows(string userId, int? page, int? count)
+    public async Task<PagedResponseDto<ReadShowDto>> GetAllUserShows<TFilter>(PagedRequestDto<TFilter> request) where TFilter : class
     {
-        var showsQuery = dbContext.Shows.Include(s => s.Schedule)
-                                        .Where(s => s.UserId == userId)
-                                        .OrderBy(s => s.CurrentSeason)
-                                        .Select(s => ReadShowDto.FromEntity(s));
-
-        var totalCount = await showsQuery.CountAsync();
-
-        if (page is not null && count is not null)
-        {
-            showsQuery = showsQuery.Skip((page.Value - 1) * count.Value)
-                                   .Take(count.Value);
-        }
-
-        var response = new PagedResponseDto<ReadShowDto>(items: await showsQuery.ToArrayAsync(),
-                                                         totalCount: totalCount,
-                                                         page: page ?? 1);
+        var response = await dbContext.Shows.Include(s => s.Schedule)
+                                            .OrderBy(s => s.CurrentSeason)
+                                            // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall; "It is convertible!"
+                                            .FilterAndPaginate(request, s => ReadShowDto.FromEntity(s));
 
         return response;
     }
