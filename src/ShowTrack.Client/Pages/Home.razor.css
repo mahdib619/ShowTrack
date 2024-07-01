@@ -14,8 +14,20 @@
     bottom: 0;
 }
 
-@media only screen and (max-width: 576px) {
+@media only screen and (max-width: 576px) and (min-height:634px) {
     ::deep .rz-datalist-content {
-        max-height: 350px;
+        max-height: 65vh;
+    }
+}
+
+@media only screen and (max-width: 576px) and (min-height:731px) {
+    ::deep .rz-datalist-content {
+        max-height: 68vh;
+    }
+}
+
+@media only screen and (max-width: 576px) and (min-height:806px) {
+    ::deep .rz-datalist-content {
+        max-height: 71vh;
     }
 }
