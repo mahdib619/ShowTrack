@@ -148,6 +148,7 @@
 
     private void PromptDelete(ReadShowDto show)
     {
+        TooltipService.Close();
         showsWithDeletePrompt.Add(show.Id);
     }
 
@@ -165,7 +166,7 @@
 
     private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
     {
-        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass, Duration = null });
+        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
     }
 
     private async Task DisplayFilterChanged(bool value)
