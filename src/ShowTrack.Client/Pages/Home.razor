@@ -58,9 +58,9 @@
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
                             @if (!showsWithDeletePrompt.Contains(show.Id))
                             {
-                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" />
-                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" />
-                                <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" />
+                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()" />
+                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" />
+                                <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" MouseLeave="() => TooltipService.Close()" />
                             }
                             else
                             {
@@ -96,11 +96,11 @@
         isLoading = true;
 
         var request = new PagedRequestDto
-        {
-            Page = (loadArgs.Skip / loadArgs.Top) + 1,
-            Count = loadArgs.Top,
-            FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null
-        };
+            {
+                Page = (loadArgs.Skip / loadArgs.Top) + 1,
+                Count = loadArgs.Top,
+                FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null
+            };
 
         pagedShows = await ShowsService.GetAllShows(request);
         shows = pagedShows?.Items;
@@ -165,7 +165,7 @@
 
     private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
     {
-        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
+        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass, Duration = null });
     }
 
     private async Task DisplayFilterChanged(bool value)
