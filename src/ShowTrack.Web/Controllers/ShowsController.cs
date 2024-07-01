@@ -18,7 +18,8 @@ public sealed class ShowsController(IShowService showService) : ControllerBase
     public async Task<ActionResult<PagedResponseDto<ReadShowDto>>> GetAllShows([FromQuery] PagedRequestDto<JObject> request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        ((dynamic)request.FilterObj!).UserId = userId;
+        request.AddFilter("UserId", userId);
+
         var shows = await showService.GetAllUserShows(request);
         return Ok(shows);
     }
