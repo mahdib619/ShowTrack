@@ -53,7 +53,7 @@
                         <div class="rz-form-row">
                             <RadzenLabel />
                             <div class="rz-form-input-wrapper">
-                                <RadzenButton ButtonType="ButtonType.Submit" Text="Login" />
+                                <RadzenButton IsBusy="@isLoginButtonBusy" BusyText="Login..." ButtonType="ButtonType.Submit" Text="Login" />
                             </div>
                         </div>
                     </div>
@@ -65,8 +65,9 @@
 
 
 @code {
-    private readonly LoginDto _loginArgs = new();
-    private bool invalidLogin;
+    readonly LoginDto _loginArgs = new();
+    bool isLoginButtonBusy;
+    bool invalidLogin;
 
     protected override async Task OnInitializedAsync()
     {
@@ -79,6 +80,8 @@
 
     private async Task Login()
     {
+        isLoginButtonBusy = true;
+
         _loginArgs.Email = _loginArgs.UserName;
         var result = await AuthProvider.Login(_loginArgs);
 
@@ -89,6 +92,7 @@
         }
 
         invalidLogin = true;
+        isLoginButtonBusy = false;
     }
 
     private void FormInputChanged()
