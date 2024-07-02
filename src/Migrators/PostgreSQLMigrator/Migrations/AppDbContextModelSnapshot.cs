@@ -229,6 +229,9 @@ namespace PostgresqlMigrator.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("IsEnded")
                         .HasColumnType("boolean");
 

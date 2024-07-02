@@ -16,4 +16,6 @@ public sealed class Show
     public ShowSchedule? Schedule { get; set; }
 
     public bool IsEnded { get; set; }
+
+    public DateTime DateAdded { get; init; } = DateTime.Now;
 }
