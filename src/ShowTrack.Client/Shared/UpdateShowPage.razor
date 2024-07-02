@@ -15,7 +15,7 @@
                 <RadzenFormField Text="Season" Style="width: 100%;">
                     <RadzenNumeric Min="1" Name="ShowSeason" TValue="int" ShowUpDown="false" @bind-Value="@Show.CurrentSeason" Style="width: 100%;" />
                 </RadzenFormField>
-                <RadzenCustomValidator @ref="_seasonValidator" Component="ShowSeason" Validator="ValidateSeason"></RadzenCustomValidator>
+                <RadzenCustomValidator Text="@seasonValidatorText" Component="ShowSeason" Validator="ValidateSeason"></RadzenCustomValidator>
             </RadzenColumn>
         </RadzenRow>
         <RadzenRow RowGap="15">
@@ -43,7 +43,7 @@
     [Parameter]
     public required ReadShowDto Show { get; set; }
 
-    private RadzenCustomValidator _seasonValidator = new();
+    private string seasonValidatorText = string.Empty;
 
     private bool ValidateSeason()
     {
@@ -52,10 +52,10 @@
             case > 0:
                 return true;
             case 0:
-                _seasonValidator.Text = "Season is required.";
+                seasonValidatorText = "Season is required.";
                 break;
             default:
-                _seasonValidator.Text = "Invalid season!";
+                seasonValidatorText = "Invalid season!";
                 break;
         }
 
