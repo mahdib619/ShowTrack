@@ -14,6 +14,10 @@
     bottom: 0;
 }
 
+::deep .rz-rating-cancel {
+    display: none;
+}
+
 @media only screen and (max-width: 576px) and (min-height:634px) {
     ::deep .rz-datalist-content {
         max-height: 65vh;

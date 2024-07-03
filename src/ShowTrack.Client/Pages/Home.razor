@@ -48,9 +48,13 @@
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Next Season On</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.Schedule?.ReleaseDate.ToString("yyyy-MM-dd", new CultureInfo("en-us")) ?? "-")</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeSM="4">
+                            <RadzenColumn Size="12" SizeSM="2">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">State</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.IsEnded ? "ended" : "on-going")</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeSM="4">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Personal Rating</RadzenText>
+                                <RadzenRating @bind-Value="show.PersonalRating" Disabled="@(!show.EnableRating)" MouseEnter="()=>show.EnableRating = true" MouseLeave="()=>show.EnableRating = false" />
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>

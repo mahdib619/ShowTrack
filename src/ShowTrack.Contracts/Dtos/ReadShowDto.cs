@@ -10,6 +10,7 @@ public class ReadShowDto
     public int CurrentSeason { get; set; }
     public ReadShowScheduleDto? Schedule { get; set; }
     public bool IsEnded { get; set; }
+    public int PersonalRating { get; set; } = -1;
 
     public static ReadShowDto FromEntity(Show entity) => new()
     {
