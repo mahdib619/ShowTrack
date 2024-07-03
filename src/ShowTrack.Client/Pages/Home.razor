@@ -176,7 +176,7 @@
         onlyDisplayOnGoingShows = value;
         await LocalStorage.SetItemAsync(nameof(onlyDisplayOnGoingShows), onlyDisplayOnGoingShows);
 
-        showDataList.CurrentPage = 1;
+        showDataList.CurrentPage = 0;
         await showDataList.Reload();
     }
 }
