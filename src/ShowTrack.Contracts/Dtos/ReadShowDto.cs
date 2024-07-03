@@ -2,7 +2,7 @@
 
 namespace ShowTrack.Contracts.Dtos;
 
-public sealed class ReadShowDto
+public class ReadShowDto
 {
     public required string Id { get; init; }
     public required string Title { get; set; }

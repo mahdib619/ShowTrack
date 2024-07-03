@@ -6,20 +6,20 @@ namespace ShowTrack.Client.Services;
 
 public sealed class ShowsService(HttpClient httpClient) : IShowsService
 {
-    public async Task<PagedResponseDto<ReadShowDto>?> GetAllShows(PagedRequestDto request)
+    public async Task<PagedResponseDto<ReadShowUiDto>?> GetAllShows(PagedRequestDto request)
     {
-        return await httpClient.GetFromJsonAsync<PagedResponseDto<ReadShowDto>>("api/Shows" + request.ToQueryString());
+        return await httpClient.GetFromJsonAsync<PagedResponseDto<ReadShowUiDto>>("api/Shows" + request.ToQueryString());
     }
 
-    public async Task<ReadShowDto?> GetSingleShow(string id)
+    public async Task<ReadShowUiDto?> GetSingleShow(string id)
     {
-        return await httpClient.GetFromJsonAsync<ReadShowDto>($"api/Shows/{id}");
+        return await httpClient.GetFromJsonAsync<ReadShowUiDto>($"api/Shows/{id}");
     }
 
-    public async Task<ReadShowDto> CreateShow(CreateShowDto showCreate)
+    public async Task<ReadShowUiDto> CreateShow(CreateShowDto showCreate)
     {
         using var result = await httpClient.PostAsJsonAsync("api/Shows", showCreate);
-        return (await result.Content.ReadFromJsonAsync<ReadShowDto>())!;
+        return (await result.Content.ReadFromJsonAsync<ReadShowUiDto>())!;
     }
 
     public async Task UpdateShow(UpdateShowDto showUpdate)

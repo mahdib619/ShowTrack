@@ -30,7 +30,7 @@
     </RadzenRow>
 
     <RadzenDataList @ref="showDataList" AllowPaging="@(showsCount > pageSize)" Data="@shows" IsLoading="@isLoading" LoadData="LoadData" PageSize="@pageSize" Count="@showsCount" ShowPagingSummary="true"
-                    TItem="ReadShowDto" WrapItems="true" PagerHorizontalAlign="HorizontalAlign.Left">
+                    TItem="ReadShowUiDto" WrapItems="true" PagerHorizontalAlign="HorizontalAlign.Left">
         <Template Context="show">
             <RadzenCard Style="width: 100%; padding: 0;">
                 <RadzenRow Gap="0">
@@ -56,7 +56,7 @@
                     </RadzenColumn>
                     <RadzenColumn Size="12" SizeSM="2" Class="rz-py-4">
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
-                            @if (!showsWithDeletePrompt.Contains(show.Id))
+                            @if (!show.ShowDeletePrompt)
                             {
                                 <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()" />
                                 <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" />
@@ -80,10 +80,9 @@
     bool isLoading;
     int showsCount;
     const int pageSize = 6;
-    RadzenDataList<ReadShowDto> showDataList = new();
-    PagedResponseDto<ReadShowDto>? pagedShows;
-    ICollection<ReadShowDto>? shows;
-    readonly HashSet<string> showsWithDeletePrompt = [];
+    RadzenDataList<ReadShowUiDto> showDataList = new();
+    PagedResponseDto<ReadShowUiDto>? pagedShows;
+    ICollection<ReadShowUiDto>? shows;
     bool onlyDisplayOnGoingShows;
 
     protected override async Task OnInitializedAsync()
@@ -121,7 +120,7 @@
         await showDataList.Reload();
     }
 
-    private async Task UpdateShow(ReadShowDto show)
+    private async Task UpdateShow(ReadShowUiDto show)
     {
         show = await DialogService.OpenAsync<UpdateShowPage>("Update Show", new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
 
@@ -133,7 +132,7 @@
         await showDataList.Reload();
     }
 
-    private async Task AddSchedule(ReadShowDto show)
+    private async Task AddSchedule(ReadShowUiDto show)
     {
         UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>(show.Schedule is null ? "Add Schedule" : "Update Schedule",
                                                                                              new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
@@ -146,22 +145,21 @@
         show.Schedule = (await ShowsService.GetSingleShow(show.Id))?.Schedule;
     }
 
-    private void PromptDelete(ReadShowDto show)
+    private void PromptDelete(ReadShowUiDto show)
     {
         TooltipService.Close();
-        showsWithDeletePrompt.Add(show.Id);
+        show.ShowDeletePrompt = true;
     }
 
-    private void CancelDelete(ReadShowDto show)
+    private static void CancelDelete(ReadShowUiDto show)
     {
-        showsWithDeletePrompt.Remove(show.Id);
+        show.ShowDeletePrompt = false;
     }
 
-    private async Task DeleteShow(ReadShowDto show)
+    private async Task DeleteShow(ReadShowUiDto show)
     {
         await ShowsService.DeleteShow(show.Id);
         await showDataList.Reload();
-        showsWithDeletePrompt.Remove(show.Id);
     }
 
     private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
