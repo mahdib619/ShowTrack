@@ -54,7 +54,7 @@
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeSM="4">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Personal Rating</RadzenText>
-                                <RadzenRating @bind-Value="show.PersonalRating" Disabled="@(!show.EnableRating)" MouseEnter="()=>show.EnableRating = true" MouseLeave="()=>show.EnableRating = false" />
+                                <RadzenRating @bind-Value="show.PersonalRating" Change="rating => OnShowRatingChange(show, rating)" Disabled="@(!show.EnableRating)" MouseEnter="()=>show.EnableRating = true" MouseLeave="()=>show.EnableRating = false" />
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
@@ -134,6 +134,12 @@
         await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
 
         await showDataList.Reload();
+    }
+
+    private async Task OnShowRatingChange(ReadShowUiDto show, int newRating)
+    {
+        show.PersonalRating = newRating;
+        await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
     }
 
     private async Task AddSchedule(ReadShowUiDto show)

@@ -19,6 +19,7 @@ public class ReadShowDto
         UserId = entity.UserId,
         CurrentSeason = entity.CurrentSeason,
         Schedule = entity.Schedule is null ? null : ReadShowScheduleDto.FromEntity(entity.Schedule),
-        IsEnded = entity.IsEnded
+        IsEnded = entity.IsEnded,
+        PersonalRating = entity.PersonalRating ?? -1
     };
 }

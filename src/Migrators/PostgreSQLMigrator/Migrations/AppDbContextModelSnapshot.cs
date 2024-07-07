@@ -235,6 +235,9 @@ namespace PostgresqlMigrator.Migrations
                     b.Property<bool>("IsEnded")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("PersonalRating")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)

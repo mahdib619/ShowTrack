@@ -32,19 +32,6 @@ public sealed class ShowsController(IShowService showService) : ControllerBase
         return Ok(show);
     }
 
-    [HttpPost("testData")]
-    public async Task<ActionResult> TestData()
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-        for (var i = 0; i < 100; i++)
-        {
-            await showService.CreateShow(new() { CurrentSeason = i, Title = "TestShow", UserId = userId });
-        }
-
-        return Ok();
-    }
-
     [HttpPost]
     public async Task<ActionResult<ReadShowDto>> CreateShow(CreateShowDto createShow)
     {
