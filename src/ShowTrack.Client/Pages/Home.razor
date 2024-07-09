@@ -6,6 +6,7 @@
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Authorization
 @using ShowTrack.Client.Models.Dtos
+@using ShowTrack.Domain.Entities
 
 @attribute [Authorize]
 
@@ -88,6 +89,7 @@
     PagedResponseDto<ReadShowUiDto>? pagedShows;
     ICollection<ReadShowUiDto>? shows;
     bool onlyDisplayOnGoingShows;
+    readonly List<string> sortItems = [nameof(Show.DateAdded) + "Desc"];
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,7 +104,8 @@
             {
                 Page = (loadArgs.Skip / loadArgs.Top) + 1,
                 Count = loadArgs.Top,
-                FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null
+                FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null,
+                SortItems = sortItems
             };
 
         pagedShows = await ShowsService.GetAllShows(request);

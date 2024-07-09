@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Linq;
-using System.Linq.Dynamic.Core;
 
 namespace ShowTrack.Client.Models.Dtos;
 
@@ -10,6 +8,7 @@ public class PagedRequestDto
     public int? Count { get; init; }
 
     private object? _filterObject;
+
     public object? FilterObject
     {
         get => _filterObject;
@@ -26,6 +25,22 @@ public class PagedRequestDto
 
     public string? Filter { get; private set; }
 
+    private ICollection<string>? _sortItems;
+    public ICollection<string>? SortItems
+    {
+        get => _sortItems;
+        set
+        {
+            if (value is not null)
+            {
+                Sort = JsonConvert.SerializeObject(value);
+            }
+            _sortItems = value;
+        }
+    }
+
+    public string? Sort { get; private set; }
+
     public string ToQueryString()
     {
         var queryDict = new Dictionary<string, object>();
@@ -39,6 +54,11 @@ public class PagedRequestDto
         if (!string.IsNullOrWhiteSpace(Filter))
         {
             queryDict[nameof(Filter)] = Filter;
+        }
+
+        if (!string.IsNullOrWhiteSpace(Sort))
+        {
+            queryDict[nameof(Sort)] = Sort;
         }
 
         if (queryDict.Count == 0)

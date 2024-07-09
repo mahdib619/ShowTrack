@@ -16,7 +16,6 @@ public sealed class ShowService(AppDbContext dbContext) : IShowService
     public async Task<PagedResponseDto<ReadShowDto>> GetAllUserShows<TFilter>(PagedRequestDto<TFilter> request) where TFilter : class
     {
         var response = await dbContext.Shows.Include(s => s.Schedule)
-                                            .OrderByDescending(s => s.DateAdded)
                                             // ReSharper disable once EntityFramework.UnsupportedServerSideFunctionCall; "It is convertible!"
                                             .FilterAndPaginate(request, s => ReadShowDto.FromEntity(s));
 
