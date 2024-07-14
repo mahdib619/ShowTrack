@@ -37,4 +37,10 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\fonts\MaterialSymbols-Rounded.woff2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

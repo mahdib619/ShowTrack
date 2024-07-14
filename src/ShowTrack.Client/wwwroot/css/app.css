@@ -76,10 +76,52 @@ code {
     color: #c02d76;
 }
 
+
+/*#region Radzen */
+@font-face {
+    font-family: 'Material Symbols Rounded';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url(../fonts/MaterialSymbols-Rounded.woff2) format('woff2');
+}
+
+.rzi.fill {
+    font-family: 'Material Symbols Rounded' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+}
+
+.rzi.outline {
+    font-family: 'Material Symbols Rounded' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: "FILL" 0, "wght" 320, "GRAD" 0, "opsz" 24;
+}
+
 .rz-tooltip.show-edit .rz-tooltip-content {
     background-color: var(--rz-warning) !important;
 }
-
 
 .rz-tooltip.show-delete .rz-tooltip-content {
     background-color: var(--rz-danger) !important;
@@ -92,3 +134,4 @@ code {
 .rz-dialog-titlebar-close {
     cursor: pointer;
 }
+/*#endregion */
