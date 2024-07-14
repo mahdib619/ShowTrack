@@ -9,7 +9,7 @@ public sealed class UpdateShowDto
     public int CurrentSeason { get; set; }
     public bool IsEnded { get; set; }
     public int? PersonalRating { get; set; }
-
+    public DateTime DatePinned { get; set; }
 
     public void UpdateEntity(Show show)
     {
@@ -17,6 +17,7 @@ public sealed class UpdateShowDto
         show.CurrentSeason = CurrentSeason;
         show.IsEnded = IsEnded;
         show.PersonalRating = PersonalRating;
+        show.DatePinned = DatePinned;
     }
 
     public static UpdateShowDto FromReadDto(ReadShowDto readDto) => new()
@@ -26,5 +27,6 @@ public sealed class UpdateShowDto
         CurrentSeason = readDto.CurrentSeason,
         IsEnded = readDto.IsEnded,
         PersonalRating = readDto.PersonalRating < 0 ? null : readDto.PersonalRating,
+        DatePinned = readDto.DatePinned
     };
 }

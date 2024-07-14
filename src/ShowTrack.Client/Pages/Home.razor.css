@@ -8,6 +8,21 @@
     background-color: var(--rz-secondary-lighter);
 }
 
+::deep .pin-section {
+    border-top-left-radius: var(--rz-datalist-border-radius);
+    border-bottom-left-radius: var(--rz-datalist-border-radius);
+    background-color: var(--rz-white);
+}
+
+    ::deep .pin-section * {
+        font-size: 22px;
+        color: var(--rz-primary);
+    }
+
+    ::deep .pin-section .rzi {
+        cursor: pointer;
+    }
+
 ::deep .rz-datalist-content {
     overflow-y: scroll;
     max-height: 550px;

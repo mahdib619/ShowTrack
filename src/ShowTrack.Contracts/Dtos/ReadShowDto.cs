@@ -11,6 +11,7 @@ public class ReadShowDto
     public ReadShowScheduleDto? Schedule { get; set; }
     public bool IsEnded { get; set; }
     public int PersonalRating { get; set; } = -1;
+    public DateTime DatePinned { get; set; }
 
     public static ReadShowDto FromEntity(Show entity) => new()
     {
@@ -20,6 +21,7 @@ public class ReadShowDto
         CurrentSeason = entity.CurrentSeason,
         Schedule = entity.Schedule is null ? null : ReadShowScheduleDto.FromEntity(entity.Schedule),
         IsEnded = entity.IsEnded,
-        PersonalRating = entity.PersonalRating ?? -1
+        PersonalRating = entity.PersonalRating ?? -1,
+        DatePinned = entity.DatePinned
     };
 }

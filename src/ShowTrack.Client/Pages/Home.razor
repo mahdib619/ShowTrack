@@ -17,8 +17,8 @@
         <RadzenColumn Class="rz-pl-2">
             <RadzenSelectBar TValue="bool" Value="@_onlyDisplayOnGoingShows" ValueChanged="DisplayFilterChanged">
                 <Items>
-                    <RadzenSelectBarItem Text="All Shows" Value="false" />
-                    <RadzenSelectBarItem Text="On-going Shows" Value="true" />
+                    <RadzenSelectBarItem Text="All Shows" Value="false"/>
+                    <RadzenSelectBarItem Text="On-going Shows" Value="true"/>
                 </Items>
             </RadzenSelectBar>
         </RadzenColumn>
@@ -34,8 +34,17 @@
         <Template Context="show">
             <RadzenCard Class="full-width rz-p-0">
                 <RadzenRow Gap="0">
-                    <RadzenColumn Size="12" SizeSM="2" Class="rz-p-4 show-title">
-                        <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(show.Title)</RadzenText>
+                    <RadzenColumn Size="12" SizeSM="2">
+                        <RadzenRow>
+                            <RadzenColumn SizeSM="1" Class="pin-section d-md-block d-none">
+                                <RadzenStack Style="height:70%;" JustifyContent="JustifyContent.Center">
+                                    <RadzenIcon Icon="keep" Class="@(show.IsPinned ? "fill" : "outline")" @onclick="()=>TogglePin(show)" />
+                                </RadzenStack>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeSM="11" Class="rz-p-4 show-title">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(show.Title)</RadzenText>
+                            </RadzenColumn>
+                        </RadzenRow>
                     </RadzenColumn>
 
                     <RadzenColumn Size="12" SizeSM="8" Class="rz-p-4">
@@ -65,19 +74,19 @@
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
                             @if (!show.ShowDeletePrompt)
                             {
-                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add" : "notifications_active")"  Click="() => AddSchedule(show)" Class="rz-px-5 rz-px-sm-0"
-                                              MouseEnter="@(args => ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()"/>
+                                    <RadzenButton Icon="@(show.Schedule is null ? "notification_add" : "notifications_active")"  Click="() => AddSchedule(show)" Class="rz-px-5 rz-px-sm-0"
+                                                  MouseEnter="@(args => ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()"/>
 
-                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)"
-                                              MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
+                                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)"
+                                                  MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
 
-                                <RadzenButton Icon="clear" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)"
-                                              MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
+                                    <RadzenButton Icon="clear" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)"
+                                                  MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
                             }
                             else
                             {
-                                <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteShow(show)" Class="rz-px-6 rz-px-sm-3"/>
-                                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="() => CancelDelete(show)" Class="rz-px-6 rz-px-sm-3"/>
+                                    <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteShow(show)" Class="rz-px-6 rz-px-sm-3"/>
+                                    <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="() => CancelDelete(show)" Class="rz-px-6 rz-px-sm-3"/>
                             }
                         </RadzenStack>
                     </RadzenColumn>

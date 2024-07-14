@@ -20,4 +20,6 @@ public sealed class Show
     public DateTime DateAdded { get; init; } = DateTime.Now;
 
     public int? PersonalRating { get; set; }
+
+    //public DateTime? DatePinned { get; set; }
 }

@@ -11,7 +11,7 @@ namespace ShowTrack.Client.Pages;
 public partial class Home
 {
     private const int PAGE_SIZE = 6;
-    private readonly List<string> _sortItems = [nameof(Show.DateAdded) + "Desc"];
+    private readonly List<string> _sortItems = [nameof(Show.DatePinned) + "Desc", nameof(Show.DateAdded) + "Desc"];
     private readonly DialogOptions _defaultDialogOptions = new() { CloseDialogOnOverlayClick = true };
 
     private bool _isLoading;
@@ -83,6 +83,21 @@ public partial class Home
     {
         show.PersonalRating = newRating;
         await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
+    }
+
+    private async Task TogglePin(ReadShowUiDto show)
+    {
+        if (show.IsPinned)
+        {
+            show.UnPin();
+        }
+        else
+        {
+            show.DatePinned = DateTime.Now;
+        }
+
+        await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
+        await _showDataList.Reload();
     }
 
     private async Task AddSchedule(ReadShowUiDto show)
