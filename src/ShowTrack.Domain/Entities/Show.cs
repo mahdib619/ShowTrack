@@ -21,5 +21,5 @@ public sealed class Show
 
     public int? PersonalRating { get; set; }
 
-    //public DateTime? DatePinned { get; set; }
+    public DateTime DatePinned { get; set; }
 }

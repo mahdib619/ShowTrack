@@ -234,6 +234,11 @@ namespace SqlServerMigrator.Migrations
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DatePinned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
                     b.Property<bool>("IsEnded")
                         .HasColumnType("bit");
 
