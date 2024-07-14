@@ -1,12 +1,9 @@
 ﻿@page "/"
 
-@using ShowTrack.Contracts.Dtos
 @using ShowTrack.Client.Services
-@using System.Globalization
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Authorization
 @using ShowTrack.Client.Models.Dtos
-@using ShowTrack.Domain.Entities
 
 @attribute [Authorize]
 
@@ -15,10 +12,10 @@
 @inject TooltipService TooltipService
 @inject ILocalStorageService LocalStorage
 
-<div style="margin-top:10px">
-    <RadzenRow Style="padding-right:18px;margin-bottom:10px;" JustifyContent="JustifyContent.SpaceBetween">
-        <RadzenColumn Style="padding-left:5px;">
-            <RadzenSelectBar TValue="bool" Value="@onlyDisplayOnGoingShows" ValueChanged="DisplayFilterChanged">
+<div class="page-body">
+    <RadzenRow JustifyContent="JustifyContent.SpaceBetween" Class="grid-top-actions">
+        <RadzenColumn Class="rz-pl-2">
+            <RadzenSelectBar TValue="bool" Value="@_onlyDisplayOnGoingShows" ValueChanged="DisplayFilterChanged">
                 <Items>
                     <RadzenSelectBarItem Text="All Shows" Value="false" />
                     <RadzenSelectBarItem Text="On-going Shows" Value="true" />
@@ -26,14 +23,16 @@
             </RadzenSelectBar>
         </RadzenColumn>
         <RadzenColumn Size="4" SizeMD="3" SizeSM="2" SizeLG="1">
-            <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Style="width:100%" Click="AddShow" />
+            <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Class="full-width" Click="AddShow" />
         </RadzenColumn>
     </RadzenRow>
 
-    <RadzenDataList @ref="showDataList" AllowPaging="@(showsCount > pageSize)" Data="@shows" IsLoading="@isLoading" LoadData="LoadData" PageSize="@pageSize" Count="@showsCount" ShowPagingSummary="true"
+    <RadzenDataList @ref="_showDataList" AllowPaging="@(_showsCount > PAGE_SIZE)" Data="@_shows" IsLoading="@_isLoading" LoadData="LoadData" 
+                    PageSize="@PAGE_SIZE" Count="@_showsCount" ShowPagingSummary="true"
                     TItem="ReadShowUiDto" WrapItems="true" PagerHorizontalAlign="HorizontalAlign.Left">
+
         <Template Context="show">
-            <RadzenCard Style="width: 100%; padding: 0;">
+            <RadzenCard Class="full-width rz-p-0">
                 <RadzenRow Gap="0">
                     <RadzenColumn Size="12" SizeSM="2" Class="rz-p-4 show-title">
                         <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(show.Title)</RadzenText>
@@ -41,151 +40,51 @@
 
                     <RadzenColumn Size="12" SizeSM="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
-                            <RadzenColumn Size="12" SizeSM="1" Style="padding-right:80px">
+                            <RadzenColumn Size="12" SizeSM="1">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Season</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.CurrentSeason)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeSM="3">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Next Season On</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(show.Schedule?.ReleaseDate.ToString("yyyy-MM-dd", new CultureInfo("en-us")) ?? "-")</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(show.ReleaseDateString)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeSM="2">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">State</RadzenText>
-                                <RadzenText TextStyle="TextStyle.Body2">@(show.IsEnded ? "ended" : "on-going")</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(show.State)</RadzenText>
                             </RadzenColumn>
                             <RadzenColumn Size="12" SizeSM="4" Style="max-height:40px">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Personal Rating</RadzenText>
-                                <RadzenRating @bind-Value="show.PersonalRating" Change="rating => OnShowRatingChange(show, rating)" Disabled="@(!show.EnableRating)" MouseEnter="()=>show.EnableRating = true" MouseLeave="()=>show.EnableRating = false" />
+
+                                <RadzenRating @bind-Value="show.PersonalRating" Change="rating => OnShowRatingChange(show, rating)"
+                                              Disabled="@(!show.EnableRating)" MouseEnter="() => show.EnableRating = true" MouseLeave="() => show.EnableRating = false"/>
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
+
                     <RadzenColumn Size="12" SizeSM="2" Class="rz-py-4">
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
                             @if (!show.ShowDeletePrompt)
                             {
-                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add":"notifications_active")" Style="width: 20%" Click="()=>AddSchedule(show)" MouseEnter="@(args=>ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()" />
-                                <RadzenButton Icon="edit" Style="width: 20%" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)" MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" />
-                                <RadzenButton Icon="clear" Style="width: 20%" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)" MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" MouseLeave="() => TooltipService.Close()" />
+                                <RadzenButton Icon="@(show.Schedule is null ? "notification_add" : "notifications_active")"  Click="() => AddSchedule(show)" Class="rz-px-5 rz-px-sm-0"
+                                              MouseEnter="@(args => ShowTooltip(args, "Schedule", "show-schedule"))" MouseLeave="() => TooltipService.Close()"/>
+
+                                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Warning" Click="() => UpdateShow(show)"
+                                              MouseEnter="@(args => ShowTooltip(args, "Edit", "show-edit"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
+
+                                <RadzenButton Icon="clear" ButtonStyle="ButtonStyle.Danger" Click="() => PromptDelete(show)"
+                                              MouseEnter="@(args => ShowTooltip(args, "Delete", "show-delete"))" MouseLeave="() => TooltipService.Close()" Class="rz-px-5 rz-px-sm-0"/>
                             }
                             else
                             {
-                                <RadzenButton Text="Delete" Style="width: 32%" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteShow(show)" />
-                                <RadzenButton Text="Cancel" Style="width: 32%" ButtonStyle="ButtonStyle.Secondary" Click="() => CancelDelete(show)" />
+                                <RadzenButton Text="Delete" ButtonStyle="ButtonStyle.Danger" Click="() => DeleteShow(show)" Class="rz-px-6 rz-px-sm-3"/>
+                                <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click="() => CancelDelete(show)" Class="rz-px-6 rz-px-sm-3"/>
                             }
                         </RadzenStack>
                     </RadzenColumn>
+
                 </RadzenRow>
             </RadzenCard>
         </Template>
+
     </RadzenDataList>
 </div>
-
-@code
-{
-    bool isLoading;
-    int showsCount;
-    const int pageSize = 6;
-    RadzenDataList<ReadShowUiDto> showDataList = new();
-    PagedResponseDto<ReadShowUiDto>? pagedShows;
-    ICollection<ReadShowUiDto>? shows;
-    bool onlyDisplayOnGoingShows;
-    readonly List<string> sortItems = [nameof(Show.DateAdded) + "Desc"];
-
-    protected override async Task OnInitializedAsync()
-    {
-        onlyDisplayOnGoingShows = await LocalStorage.GetItemAsync<bool>(nameof(onlyDisplayOnGoingShows));
-    }
-
-    private async Task LoadData(LoadDataArgs loadArgs)
-    {
-        isLoading = true;
-
-        var request = new PagedRequestDto
-            {
-                Page = (loadArgs.Skip / loadArgs.Top) + 1,
-                Count = loadArgs.Top,
-                FilterObject = onlyDisplayOnGoingShows ? new { IsEnded = false } : null,
-                SortItems = sortItems
-            };
-
-        pagedShows = await ShowsService.GetAllShows(request);
-        shows = pagedShows?.Items;
-        showsCount = pagedShows?.TotalCount ?? 0;
-
-        isLoading = false;
-    }
-
-    private async Task AddShow()
-    {
-        CreateShowDto? newShow = await DialogService.OpenAsync<AddShowPage>("New Show", null, new() { CloseDialogOnOverlayClick = true });
-
-        if (newShow is null)
-            return;
-
-        await ShowsService.CreateShow(newShow);
-
-        await showDataList.Reload();
-    }
-
-    private async Task UpdateShow(ReadShowUiDto show)
-    {
-        show = await DialogService.OpenAsync<UpdateShowPage>("Update Show", new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
-
-        if (show is null)
-            return;
-
-        await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
-
-        await showDataList.Reload();
-    }
-
-    private async Task OnShowRatingChange(ReadShowUiDto show, int newRating)
-    {
-        show.PersonalRating = newRating;
-        await ShowsService.UpdateShow(UpdateShowDto.FromReadDto(show));
-    }
-
-    private async Task AddSchedule(ReadShowUiDto show)
-    {
-        UpdateShowScheduleDto? newSchedule = await DialogService.OpenAsync<AddSchedulePage>(show.Schedule is null ? "Add Schedule" : "Update Schedule",
-                                                                                             new() { ["Show"] = show }, new() { CloseDialogOnOverlayClick = true });
-
-        if (newSchedule is null)
-            return;
-
-        await ShowsService.CreateOrUpdateShowSchedule(newSchedule);
-
-        show.Schedule = (await ShowsService.GetSingleShow(show.Id))?.Schedule;
-    }
-
-    private void PromptDelete(ReadShowUiDto show)
-    {
-        TooltipService.Close();
-        show.ShowDeletePrompt = true;
-    }
-
-    private static void CancelDelete(ReadShowUiDto show)
-    {
-        show.ShowDeletePrompt = false;
-    }
-
-    private async Task DeleteShow(ReadShowUiDto show)
-    {
-        await ShowsService.DeleteShow(show.Id);
-        await showDataList.Reload();
-    }
-
-    private void ShowTooltip(ElementReference elementReference, string text, string cssClass)
-    {
-        TooltipService.Open(elementReference, text, new() { Position = TooltipPosition.Top, CssClass = cssClass });
-    }
-
-    private async Task DisplayFilterChanged(bool value)
-    {
-        onlyDisplayOnGoingShows = value;
-        await LocalStorage.SetItemAsync(nameof(onlyDisplayOnGoingShows), onlyDisplayOnGoingShows);
-
-        showDataList.CurrentPage = 0;
-        await showDataList.Reload();
-    }
-}

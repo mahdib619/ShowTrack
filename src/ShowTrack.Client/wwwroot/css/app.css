@@ -135,3 +135,11 @@ code {
     cursor: pointer;
 }
 /*#endregion */
+
+.page-body {
+    margin-top: 10px;
+}
+
+.full-width {
+    width: 100% !important;
+}

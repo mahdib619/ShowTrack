@@ -1,9 +1,12 @@
 ﻿using ShowTrack.Contracts.Dtos;
+using System.Globalization;
 
 namespace ShowTrack.Client.Models.Dtos;
 
 public sealed class ReadShowUiDto : ReadShowDto
 {
+    public string State => IsEnded ? "ended" : "on-going";
+    public string ReleaseDateString => Schedule?.ReleaseDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? "-";
     public bool ShowDeletePrompt { get; set; }
 
     private bool _enableRating;
