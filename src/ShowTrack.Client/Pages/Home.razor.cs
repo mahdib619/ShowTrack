@@ -15,7 +15,7 @@ public partial class Home
     private readonly DialogOptions _defaultDialogOptions = new() { CloseDialogOnOverlayClick = true };
 
     private bool _isLoading;
-    private bool _onlyDisplayOnGoingShows;
+    private bool? _onlyDisplayOnGoingShows;
 
     private RadzenDataList<ReadShowUiDto> _showDataList = new();
 
@@ -23,24 +23,17 @@ public partial class Home
     private PagedResponseDto<ReadShowUiDto>? _pagedShows;
     private ICollection<ReadShowUiDto>? _shows;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _onlyDisplayOnGoingShows = await LocalStorage.GetItemAsync<bool>(nameof(_onlyDisplayOnGoingShows));
-            await DisplayFilterChanged(_onlyDisplayOnGoingShows);
-        }
-    }
-
     private async Task LoadData(LoadDataArgs loadArgs)
     {
+        _onlyDisplayOnGoingShows ??= await LocalStorage.GetItemAsync<bool>(nameof(_onlyDisplayOnGoingShows));
+
         _isLoading = true;
 
         var request = new PagedRequestDto
         {
             Page = (loadArgs.Skip / loadArgs.Top) + 1,
             Count = loadArgs.Top,
-            FilterObject = _onlyDisplayOnGoingShows ? new { IsEnded = false } : null,
+            FilterObject = _onlyDisplayOnGoingShows!.Value ? new { IsEnded = false } : null,
             SortItems = _sortItems
         };
 

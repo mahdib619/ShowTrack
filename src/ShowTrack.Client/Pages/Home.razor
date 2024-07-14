@@ -15,7 +15,7 @@
 <div class="page-body">
     <RadzenRow JustifyContent="JustifyContent.SpaceBetween" Class="grid-top-actions">
         <RadzenColumn Class="rz-pl-2">
-            <RadzenSelectBar TValue="bool" Value="@_onlyDisplayOnGoingShows" ValueChanged="DisplayFilterChanged">
+            <RadzenSelectBar TValue="bool" Value="@(_onlyDisplayOnGoingShows ?? false)" ValueChanged="DisplayFilterChanged">
                 <Items>
                     <RadzenSelectBarItem Text="All Shows" Value="false"/>
                     <RadzenSelectBarItem Text="On-going Shows" Value="true"/>
