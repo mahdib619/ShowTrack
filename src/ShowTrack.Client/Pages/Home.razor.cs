@@ -23,9 +23,13 @@ public partial class Home
     private PagedResponseDto<ReadShowUiDto>? _pagedShows;
     private ICollection<ReadShowUiDto>? _shows;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _onlyDisplayOnGoingShows = await LocalStorage.GetItemAsync<bool>(nameof(_onlyDisplayOnGoingShows));
+        if (firstRender)
+        {
+            _onlyDisplayOnGoingShows = await LocalStorage.GetItemAsync<bool>(nameof(_onlyDisplayOnGoingShows));
+            await DisplayFilterChanged(_onlyDisplayOnGoingShows);
+        }
     }
 
     private async Task LoadData(LoadDataArgs loadArgs)
