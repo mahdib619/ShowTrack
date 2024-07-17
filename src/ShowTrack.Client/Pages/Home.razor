@@ -22,7 +22,7 @@
                 </Items>
             </RadzenSelectBar>
         </RadzenColumn>
-        <RadzenColumn Size="4" SizeMD="3" SizeSM="2" SizeLG="1">
+        <RadzenColumn Size="4" SizeSM="2">
             <RadzenButton ButtonStyle="ButtonStyle.Success" Text="New Show" Class="full-width" Click="AddShow" />
         </RadzenColumn>
     </RadzenRow>
@@ -34,34 +34,34 @@
         <Template Context="show">
             <RadzenCard Class="full-width rz-p-0">
                 <RadzenRow Gap="0">
-                    <RadzenColumn Size="12" SizeSM="2">
+                    <RadzenColumn Size="12" SizeMD="3" SizeLG="2">
                         <RadzenRow>
-                            <RadzenColumn SizeSM="1" Class="pin-section d-md-block d-none">
-                                <RadzenStack Style="height:70%;" JustifyContent="JustifyContent.Center">
+                            <RadzenColumn Size="1" OrderMD="1" Order="2" Class="pin-section">
+                                <RadzenStack>
                                     <RadzenIcon Icon="keep" Class="@(show.IsPinned ? "fill" : "outline")" @onclick="()=>TogglePin(show)" />
                                 </RadzenStack>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeSM="11" Class="rz-p-4 show-title">
+                            <RadzenColumn Size="11" OrderMD="2" Order="1" Class="rz-p-4 show-title">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" class="rz-color-secondary">@(show.Title)</RadzenText>
                             </RadzenColumn>
                         </RadzenRow>
                     </RadzenColumn>
 
-                    <RadzenColumn Size="12" SizeSM="8" Class="rz-p-4">
+                    <RadzenColumn Size="12" SizeMD="7" SizeLG="8" Class="rz-p-4">
                         <RadzenRow Gap="0">
-                            <RadzenColumn Size="12" SizeSM="1">
+                            <RadzenColumn Size="12" SizeMD="2" SizeLG="1">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Season</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.CurrentSeason)</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeSM="3">
+                            <RadzenColumn Size="12" SizeMD="3">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Next Season On</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.ReleaseDateString)</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeSM="2">
+                            <RadzenColumn Size="12" SizeMD="2">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">State</RadzenText>
                                 <RadzenText TextStyle="TextStyle.Body2">@(show.State)</RadzenText>
                             </RadzenColumn>
-                            <RadzenColumn Size="12" SizeSM="4" Style="max-height:40px">
+                            <RadzenColumn Size="12" SizeMD="4" Style="max-height:40px">
                                 <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Personal Rating</RadzenText>
 
                                 <RadzenRating @bind-Value="show.PersonalRating" Change="rating => OnShowRatingChange(show, rating)"
@@ -70,7 +70,7 @@
                         </RadzenRow>
                     </RadzenColumn>
 
-                    <RadzenColumn Size="12" SizeSM="2" Class="rz-py-4">
+                    <RadzenColumn Size="12" SizeMD="2" Class="rz-py-4">
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="5" Class="rz-pr-2">
                             @if (!show.ShowDeletePrompt)
                             {

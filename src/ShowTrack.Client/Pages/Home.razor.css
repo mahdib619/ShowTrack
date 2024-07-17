@@ -11,17 +11,58 @@
 ::deep .pin-section {
     border-top-left-radius: var(--rz-datalist-border-radius);
     border-bottom-left-radius: var(--rz-datalist-border-radius);
-    background-color: var(--rz-white);
 }
 
+@media only screen and (min-width: 1280px) {
     ::deep .pin-section * {
-        font-size: 22px;
-        color: var(--rz-primary);
+        font-size: 20px !important;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    ::deep .pin-section {
+        background-color: var(--rz-white);
     }
 
-    ::deep .pin-section .rzi {
-        cursor: pointer;
+        ::deep .pin-section .rz-stack {
+            height: 70%;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+}
+
+@media only screen and (min-width: 1024px) and (max-width:1279px) {
+    ::deep .pin-section * {
+        font-size: 22px !important;
     }
+}
+
+@media only screen and (max-width: 1023px) {
+    ::deep .pin-section {
+        background-color: var(--rz-secondary-lighter);
+    }
+
+        ::deep .pin-section .rz-stack {
+            align-items: end !important;
+            margin-top: 1rem;
+            padding-right: 10px;
+        }
+
+        ::deep .pin-section * {
+            font-size: 22px !important;
+        }
+}
+
+::deep .pin-section * {
+    font-size: 22px;
+    color: var(--rz-primary);
+}
+
+::deep .pin-section .rzi {
+    cursor: pointer;
+    max-width: 100% !important;
+    font-size: 18px;
+}
 
 ::deep .rz-datalist-content {
     overflow-y: scroll;
